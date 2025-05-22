@@ -1,9 +1,22 @@
-// App.tsx
+import { useEffect } from 'react'
+import { useCountStore } from './stores/common.store';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './routes';
+import './App.css'
 
 function App() {
-  return <RouterProvider router={router} />;
+  const { count: countFromStore } = useCountStore();
+
+
+  useEffect(() => {
+
+  }, [])
+
+  return (
+    <>
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
-export default App;
+export default App
