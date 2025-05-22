@@ -1,0 +1,323 @@
+/* icon header  */
+.icon-btn {
+  @apply w-[40px] h-[40px] rounded-full flex items-center justify-center bg-[#EBEEF6];
+}
+
+ /* SALE & BANNER */
+.sidebar-menu {
+  @apply bg-white rounded-lg pl-4 lg:pl-[54px] py-5;
+}
+
+.sale-title {
+  @apply text-red-500 text-[14px] font-bold mb-4;
+}
+
+.menu-list {
+  @apply space-y-3 text-[13px] font-semibold text-black;
+}
+
+.banner-box {
+  @apply bg-white rounded-lg overflow-hidden;
+}
+
+.btn-banner {
+  @apply absolute left-4 md:left-[40px] lg:left-[60px] bottom-4 md:bottom-[30px] lg:bottom-[50px] bg-white text-black text-[12px] font-medium px-4 py-2 rounded;
+}
+
+/* BRAND & TOP CATEGORIES SECTION */
+
+.section-box {
+  @apply bg-white rounded-lg shadow py-6 px-4 md:px-6 lg:px-[30px] h-auto;
+}
+
+.section-header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.view-all {
+  @apply text-[13px] text-[#666666] cursor-pointer hover:underline;
+}
+
+.brand-grid {
+  @apply grid grid-cols-3 sm:grid-cols-5 gap-4;
+}
+
+.category-box {
+  @apply flex flex-col items-center text-center;
+}
+
+/* DEALS OF THE DAY SECTION */
+.deal-section {
+  @apply flex flex-col lg:flex-row gap-4 w-full;
+}
+
+.deal-left {
+  @apply lg:w-3/4 w-full flex flex-col;
+}
+
+.deal-title {
+  @apply bg-[#1ABA1A] text-white text-[18px] font-bold rounded-lg h-[62px] flex items-center px-6 lg:px-[30px];
+}
+
+.deal-box {
+  @apply bg-white rounded-lg shadow flex flex-col lg:flex-row pt-10 lg:pt-[54px] gap-6 h-auto lg:h-[504px];
+}
+
+.deal-img-col {
+  @apply lg:w-1/2 w-full flex gap-4;
+}
+
+.deal-thumbnails {
+  @apply flex flex-row lg:flex-col gap-5 px-6 lg:pl-[30px] overflow-x-auto lg:overflow-x-visible;
+}
+
+.deal-main-img {
+  @apply flex-1 flex items-center justify-center px-6 lg:px-0;
+}
+
+.deal-main-img img {
+  @apply w-full max-h-[250px] lg:max-h-full object-contain;
+}
+
+.deal-info {
+  @apply lg:w-1/2 w-full flex flex-col justify-start gap-5 px-6 py-4;
+}
+
+.deal-name {
+  @apply text-[16px] font-bold text-black;
+}
+
+.deal-prices {
+  @apply flex items-center gap-4;
+}
+
+.deal-price {
+  @apply text-[22px] text-[#FF0000] font-semibold;
+}
+
+.deal-old-price {
+  @apply text-[16px] text-[#999] font-semibold line-through;
+}
+
+.deal-description {
+  @apply list-disc list-inside text-[12px] text-black leading-relaxed;
+}
+
+.deal-tags {
+  @apply flex gap-3 flex-wrap;
+}
+
+.deal-tag-green {
+  @apply px-3 py-1 bg-[#f4fcf4] text-[#1ABA1A] text-[12px] rounded-sm transition duration-300 hover:bg-[#1ABA1A] hover:text-white cursor-pointer;
+}
+
+.deal-tag-red {
+  @apply px-3 py-1 bg-[#fef5f4] text-[#F1352B] text-[12px] rounded-sm transition duration-300 hover:bg-[#F1352B] hover:text-white cursor-pointer;
+}
+
+.deal-hurry {
+  @apply flex flex-col gap-2 mt-2;
+}
+
+.deal-hurry-text {
+  @apply text-[#1a1a1a] text-[14px] font-semibold uppercase;
+}
+
+.deal-countdown {
+  @apply flex gap-2 flex-wrap;
+}
+
+.deal-countdown-box {
+  @apply bg-[#f2f2f2] text-[#1a1a1a] text-[14px] font-semibold w-[50px] h-[50px] rounded flex items-center justify-center;
+}
+
+.deal-progress {
+  @apply w-full mt-6;
+}
+
+.deal-progress-bar {
+  @apply w-full max-w-[450px] bg-gray-200 rounded-full h-[10px] overflow-hidden;
+}
+
+.deal-progress-fill {
+  @apply bg-[#1ABA1A] h-full rounded-full;
+}
+
+.deal-progress-text {
+  @apply text-[13px] mt-2;
+}
+
+.deal-progress-sold {
+  @apply text-[#666666];
+}
+
+.deal-progress-amount {
+  @apply text-black font-bold;
+}
+
+.deal-right {
+  @apply lg:w-1/4 w-full flex flex-col gap-4;
+}
+
+.deal-banner {
+  @apply h-[177px] rounded-lg overflow-hidden;
+}
+
+.deal-banner img {
+  @apply w-full h-full object-cover;
+}
+
+/* MEMBER FREE SHIPPING BANNER */
+.member-freeshipping {
+  @apply my-4 h-[110px] bg-cover bg-center rounded-lg flex items-center justify-center;
+}
+
+.member-text {
+  @apply text-white text-center px-4 text-[18px];
+}
+
+.member-highlight {
+  @apply text-[#FFE400];
+}
+
+.member-note {
+  @apply italic;
+}
+
+/* sản phẩm best seller  */
+/* Header phân loại và View All */
+.best-seller-header {
+  @apply mb-6 flex justify-between items-center;
+}
+
+.best-seller-tabs {
+  @apply flex gap-10;
+}
+
+.best-seller-tab {
+  @apply text-[18px] font-semibold cursor-pointer;
+}
+
+.best-seller-tab.inactive {
+  @apply text-[#666666] font-normal;
+}
+
+.best-seller-viewall {
+  @apply text-[13px] text-[#666666] cursor-pointer;
+}
+
+/* Lưới sản phẩm */
+.best-seller-grid {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6;
+}
+
+/* Item sản phẩm */
+.best-seller-item {
+  @apply bg-white rounded-lg border p-4 relative;
+}
+
+.best-seller-badge {
+  @apply absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-0.5 rounded;
+}
+
+.best-seller-image {
+  @apply mx-auto h-28 object-contain;
+}
+
+.best-seller-name {
+  @apply text-[14px] font-bold text-black mt-4 text-left;
+}
+
+.best-seller-price {
+  @apply text-red-500 font-semibold text-[18px] mt-3 text-left;
+}
+
+.best-seller-old-price {
+  @apply text-gray-400 font-semibold line-through text-[15px] ml-2;
+}
+
+.best-seller-tags {
+  @apply flex gap-2 mt-4 text-left;
+}
+
+.best-seller-tag-green {
+  @apply text-green-600 text-xs font-medium border border-green-500 rounded px-2 py-0.5;
+}
+
+.best-seller-tag-red {
+  @apply text-red-500 text-xs font-medium border border-red-500 rounded px-2 py-0.5;
+}
+
+/* TOP CELLPHONE SECTION */
+.top-item {
+  @apply flex items-center gap-3 bg-gray-50 rounded-lg p-3;
+}
+.top-item-title {
+  @apply text-sm font-semibold;
+}
+.top-item-sub {
+  @apply text-xs text-gray-500;
+}
+.top-item-img {
+  @apply h-16 w-16 object-contain;
+}
+
+/* PRODUCT CARD */
+.product-card {
+  @apply bg-white rounded-lg border p-4 relative;
+}
+.product-img {
+  @apply mx-auto h-28 object-contain;
+}
+.product-name {
+  @apply text-[14px] font-bold text-black mt-4 text-left;
+}
+.product-price {
+  @apply text-red-500 font-semibold text-[18px] mt-3 text-left;
+}
+.product-old-price {
+  @apply text-gray-400 font-semibold line-through text-[15px];
+}
+.badge-save {
+  @apply absolute top-2 left-2 bg-green-500 text-white text-xs font-semibold px-2 py-0.5 rounded;
+}
+
+/* TAG COMMON */
+.tag-green {
+  @apply text-green-600 text-xs font-medium border border-green-500 rounded px-2 py-0.5;
+}
+.tag-red {
+  @apply text-red-500 text-xs font-medium border border-red-500 rounded px-2 py-0.5;
+}
+
+/* GRID SECTION */
+.section-grid-30px {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 px-[30px];
+}
+
+
+
+/* footer  */
+.text-sm-white {
+  @apply text-sm text-white;
+}
+
+.footer-title {
+  @apply font-bold text-lg mb-8;
+}
+
+.footer-list {
+  @apply text-sm text-[#666666] space-y-1;
+}
+
+.social-icon {
+  @apply hover:text-white flex items-center justify-center w-9 h-9 rounded-full bg-[#E1E3EB] text-sm-white;
+}
+
+.footer-section {
+  @apply lg:col-span-2;
+}
+
+
+
+
