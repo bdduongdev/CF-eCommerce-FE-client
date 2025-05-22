@@ -1,17 +1,15 @@
-import { createBrowserRouter, Link } from "react-router-dom";
+// main.route.tsx
+import ClientLayout from '../layouts/client';
+import HomePage from '../pages/home/HomePage';
+import { type RouteObject } from 'react-router-dom';
 
-export const router = createBrowserRouter([
+export const mainRoutes: RouteObject[] = [
   {
-    path: "/",
-    element: (
-      <div>
-        <h1>Hello World</h1>
-        <Link to="about">About Us</Link>
-      </div>
-    ),
+    path: '/',
+    element: <ClientLayout />,
+    children: [
+      { index: true, element: <HomePage /> },
+      // { path: 'about', element: <AboutPage /> },
+    ],
   },
-  {
-    path: "about",
-    element: <div>About</div>,
-  },
-]);
+];
