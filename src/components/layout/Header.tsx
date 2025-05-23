@@ -49,8 +49,8 @@ export default function Header() {
             }`}
           >
             <li className="relative group">
-              <Link to="#" className="flex items-center whitespace-nowrap">
-                Homes
+              <Link to="/" className="flex items-center whitespace-nowrap">
+                Home
               </Link>
             </li>
             <li className="relative group">
@@ -101,12 +101,16 @@ export default function Header() {
           </div>
           <div className="mr-5">
             <p className="text-[11px] text-[#666666]">WELCOME</p>
-            <p className="text-[14px] font-bold text-black">
-              LOG IN / REGISTER
-            </p>
+            <div className="flex space-x-2 text-[14px] font-bold text-black">
+              <Link to="/login">LOG IN</Link>
+              <span>/</span>
+              <Link to="/register">REGISTER</Link>
+            </div>
           </div>
           <div className="icon-btn">
-            <ShoppingBag className="h-5 w-5" />
+            <Link to="#">
+              <ShoppingBag className="h-5 w-5" />
+            </Link>
           </div>
           <div>
             <p className="text-[11px] text-[#666666]">CART</p>

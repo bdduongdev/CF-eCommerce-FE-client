@@ -2,6 +2,7 @@
 import ClientLayout from '../layouts/client';
 import HomePage from '../pages/home/HomePage';
 import { type RouteObject } from 'react-router-dom';
+import Register from '../pages/register/Register';
 
 export const mainRoutes: RouteObject[] = [
   {
@@ -9,7 +10,8 @@ export const mainRoutes: RouteObject[] = [
     element: <ClientLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      // { path: 'about', element: <AboutPage /> },
+      { path: 'register', element: <Register /> },
+      // { path: 'login', element: <Login /> },
     ],
   },
 ];
