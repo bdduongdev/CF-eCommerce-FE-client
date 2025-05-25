@@ -108,7 +108,7 @@ export default function Header() {
             </div>
           </div>
           <div className="icon-btn">
-            <Link to="#">
+            <Link to="/cart">
               <ShoppingBag className="h-5 w-5" />
             </Link>
           </div>
