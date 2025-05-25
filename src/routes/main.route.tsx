@@ -4,6 +4,8 @@ import HomePage from '../pages/home/HomePage';
 import { type RouteObject } from 'react-router-dom';
 import Register from '../pages/register/Register';
 import Login from '../pages/login/Login';
+import ProductDetail from '../pages/productdetail/ProductDetail';
+
 
 export const mainRoutes: RouteObject[] = [
   {
@@ -11,6 +13,7 @@ export const mainRoutes: RouteObject[] = [
     element: <ClientLayout />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: '/product', element: <ProductDetail /> }, // /product/:id 
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
     ],
