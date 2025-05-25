@@ -1,25 +1,28 @@
+import { Link } from "react-router-dom";
+
 const HomePage = () => {
   return (
     <div>
       <main className="bg-[#e2e4eb] py-5">
+
         {/* SALE & BANNER SECTION */}
         <section className="flex flex-col lg:flex-row gap-4 mb-4">
           {/* Sidebar menu */}
           <div className="w-full lg:w-1/4 sidebar-menu">
             <p className="sale-title">SALE 40% OFF</p>
             <ul className="menu-list">
-              <li><a href="#">Laptops</a></li>
-              <li><a href="#">PC &amp; Computers</a></li>
-              <li><a href="#">Cell Phones</a></li>
-              <li><a href="#">Tablets</a></li>
-              <li><a href="#">Gaming &amp; VR</a></li>
-              <li><a href="#">Networking</a></li>
-              <li><a href="#">Cameras</a></li>
-              <li><a href="#">Sounds</a></li>
-              <li><a href="#">Office</a></li>
-              <li><a href="#">Storage, USB</a></li>
-              <li><a href="#">Accessories</a></li>
-              <li><a href="#">Clearance</a></li>
+              <li><Link to="#">Laptops</Link></li>
+              <li><Link to="#">PC &amp; Computers</Link></li>
+              <li><Link to="#">Cell Phones</Link></li>
+              <li><Link to="#">Tablets</Link></li>
+              <li><Link to="#">Gaming &amp; VR</Link></li>
+              <li><Link to="#">Networking</Link></li>
+              <li><Link to="#">Cameras</Link></li>
+              <li><Link to="#">Sounds</Link></li>
+              <li><Link to="#">Office</Link></li>
+              <li><Link to="#">Storage, USB</Link></li>
+              <li><Link to="#">Accessories</Link></li>
+              <li><Link to="#">Clearance</Link></li>
             </ul>
           </div>
 
@@ -60,7 +63,7 @@ const HomePage = () => {
             <div className="section-box">
               <div className="section-header">
                 <h2 className="text-[18px] font-bold">FEATURED BRANDS</h2>
-                <a className="view-all">View All</a>
+                <Link className="view-all" to="#">View All</Link>
               </div>
               <div className="brand-grid mb-4">
                 <img src="assets/images/brand1.png" alt="brand1" />
@@ -82,7 +85,7 @@ const HomePage = () => {
             <div className="section-box">
               <div className="section-header">
                 <h2 className="text-[18px] font-bold">TOP CATEGORIES</h2>
-                <a className="view-all">View All</a>
+                <Link className="view-all" to="#">View All</Link>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
                 <div className="category-box">
@@ -143,17 +146,16 @@ const HomePage = () => {
                 </div>
                 {/* Ảnh lớn bên phải */}
                 <div className="deal-main-img">
-                  <img
-                    src="/assets/images/dealsp1.png"
-                    alt=""
-                  />
+                  <img src="/assets/images/dealsp1.png" alt="" />
                 </div>
               </div>
               {/* Cột phải: Thông tin sản phẩm */}
               <div className="deal-info">
                 {/* Tên sản phẩm */}
                 <h3 className="deal-name">
-                  Xioma Redmi Note 11 Pro 256GB 2023, Black Smartphone
+                  <Link to="/product/xioma-redmi-note-11-pro">
+                    Xioma Redmi Note 11 Pro 256GB 2023, Black Smartphone
+                  </Link>
                 </h3>
                 {/* Giá */}
                 <div className="deal-prices">
@@ -199,28 +201,26 @@ const HomePage = () => {
               </div>
             </div>
           </div>
+
           {/* Phần bên phải (ảnh deal) */}
           <div className="deal-right">
             {/* Box 1 */}
             <div className="deal-banner bg-white">
-              <img
-                src="assets/images/deal1.png"
-                alt="Banner 1"
-              />
+              <Link to="/promo/deal-1">
+                <img src="assets/images/deal1.png" alt="Banner 1" />
+              </Link>
             </div>
             {/* Box 2 */}
             <div className="deal-banner bg-[#1a1a1a]">
-              <img
-                src="assets/images/deal2.png"
-                alt="Banner 2"
-              />
+              <Link to="/promo/deal-2">
+                <img src="assets/images/deal2.png" alt="Banner 2" />
+              </Link>
             </div>
             {/* Box 3 */}
             <div className="deal-banner bg-white">
-              <img
-                src="assets/images/deal3.png"
-                alt="Banner 3"
-              />
+              <Link to="/promo/deal-3">
+                <img src="assets/images/deal3.png" alt="Banner 3" />
+              </Link>
             </div>
           </div>
         </section>
@@ -242,20 +242,20 @@ const HomePage = () => {
           {/* loại sp and view all */}
           <div className="best-seller-header">
             <div className="best-seller-tabs">
-              <a href="" className="best-seller-tab">
+              <Link to="" className="best-seller-tab">
                 BEST SELLER
-              </a>
-              <a href="" className="best-seller-tab inactive">
+              </Link>
+              <Link to="" className="best-seller-tab inactive">
                 NEW IN
-              </a>
-              <a href="" className="best-seller-tab inactive">
+              </Link>
+              <Link to="" className="best-seller-tab inactive">
                 POPULAR
-              </a>
+              </Link>
             </div>
             <div>
-              <a className="best-seller-viewall" href="">
+              <Link className="best-seller-viewall" to="">
                 View All
-              </a>
+              </Link>
             </div>
           </div>
           {/* best seller */}
@@ -264,13 +264,13 @@ const HomePage = () => {
             <div className="best-seller-item">
               {/* SAVE $ Badge */}
               <div className="best-seller-badge">SAVE $199.00</div>
-              <a href="">
+              <Link to="">
                 <img
                   src="assets/images/bestsl1.png"
                   alt="BOSO Headphone"
                   className="best-seller-image"
                 />
-              </a>
+              </Link>
               <p className="best-seller-name">
                 BOSO 2 Wireless On Ear Headphone
               </p>
@@ -287,13 +287,13 @@ const HomePage = () => {
             {/* Product 2 */}
             <div className="best-seller-item">
               <div className="best-seller-badge">SAVE $199.00</div>
-              <a href="">
+              <Link to="">
                 <img
                   src="assets/images/bestsl1.png"
                   alt="BOSO Headphone"
                   className="best-seller-image"
                 />
-              </a>
+              </Link>
               <p className="best-seller-name">
                 BOSO 2 Wireless On Ear Headphone
               </p>
@@ -310,13 +310,13 @@ const HomePage = () => {
             {/* Product 3 */}
             <div className="best-seller-item">
               <div className="best-seller-badge">SAVE $199.00</div>
-              <a href="">
+              <Link to="">
                 <img
                   src="assets/images/bestsl1.png"
                   alt="BOSO Headphone"
                   className="best-seller-image"
                 />
-              </a>
+              </Link>
               <p className="best-seller-name">
                 BOSO 2 Wireless On Ear Headphone
               </p>
@@ -333,13 +333,13 @@ const HomePage = () => {
             {/* Product 4 */}
             <div className="best-seller-item">
               <div className="best-seller-badge">SAVE $199.00</div>
-              <a href="">
+              <Link to="">
                 <img
                   src="assets/images/bestsl1.png"
                   alt="BOSO Headphone"
                   className="best-seller-image"
                 />
-              </a>
+              </Link>
               <p className="best-seller-name">
                 BOSO 2 Wireless On Ear Headphone
               </p>
@@ -352,17 +352,16 @@ const HomePage = () => {
                 <span className="best-seller-tag-red">FREE GIFT</span>
               </div>
             </div>
-
             {/* Product 5 */}
             <div className="best-seller-item">
               <div className="best-seller-badge">SAVE $199.00</div>
-              <a href="">
+              <Link to="">
                 <img
                   src="assets/images/bestsl1.png"
                   alt="BOSO Headphone"
                   className="best-seller-image"
                 />
-              </a>
+              </Link>
               <p className="best-seller-name">
                 BOSO 2 Wireless On Ear Headphone
               </p>
@@ -382,8 +381,12 @@ const HomePage = () => {
         <section className="bg-white rounded-lg mb-4">
           {/* tiêu đề */}
           <div className="flex justify-between mb-[30px] pt-[30px]">
-            <h2 className="text-[18px] font-bold ml-[30px]">TOP CELLPHONE &amp; TABLES</h2>
-            <a className="text-[13px] text-[#666666] mr-[46px]">View All</a>
+            <h2 className="text-[18px] font-bold ml-[30px]">
+              BEST LAPTOPS &amp; COMPUTERS
+            </h2>
+            <Link to="/all-products" className="text-[13px] text-[#666666] mr-[46px]">
+              View All
+            </Link>
           </div>
 
           {/* Top section: 6 small product items + banner */}
@@ -396,136 +399,162 @@ const HomePage = () => {
                 className="w-full h-full object-cover rounded-lg"
               />
             </div>
-
             {/* 6 small items */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {/* Item 1–6 */}
               <div className="top-item">
                 <div className="text-left">
                   <p className="top-item-title">iPhone (iOS)</p>
                   <p className="top-item-sub">18 items</p>
                 </div>
-                <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="top-item-img" />
+                <img
+                  src="assets/images/topcellphone1.png"
+                  alt="iPhone Series"
+                  className="top-item-img"
+                />
               </div>
-
               <div className="top-item">
                 <div className="text-left">
                   <p className="top-item-title">iPhone (iOS)</p>
                   <p className="top-item-sub">18 items</p>
                 </div>
-                <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="top-item-img" />
+                <img
+                  src="assets/images/topcellphone1.png"
+                  alt="iPhone Series"
+                  className="top-item-img"
+                />
               </div>
-
               <div className="top-item">
                 <div className="text-left">
                   <p className="top-item-title">iPhone (iOS)</p>
                   <p className="top-item-sub">18 items</p>
                 </div>
-                <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="top-item-img" />
+                <img
+                  src="assets/images/topcellphone1.png"
+                  alt="iPhone Series"
+                  className="top-item-img"
+                />
               </div>
-
               <div className="top-item">
                 <div className="text-left">
                   <p className="top-item-title">iPhone (iOS)</p>
                   <p className="top-item-sub">18 items</p>
                 </div>
-                <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="top-item-img" />
+                <img
+                  src="assets/images/topcellphone1.png"
+                  alt="iPhone Series"
+                  className="top-item-img"
+                />
               </div>
-
               <div className="top-item">
                 <div className="text-left">
                   <p className="top-item-title">iPhone (iOS)</p>
                   <p className="top-item-sub">18 items</p>
                 </div>
-                <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="top-item-img" />
+                <img
+                  src="assets/images/topcellphone1.png"
+                  alt="iPhone Series"
+                  className="top-item-img"
+                />
               </div>
-
               <div className="top-item">
                 <div className="text-left">
                   <p className="top-item-title">iPhone (iOS)</p>
                   <p className="top-item-sub">18 items</p>
                 </div>
-                <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="top-item-img" />
+                <img
+                  src="assets/images/topcellphone1.png"
+                  alt="iPhone Series"
+                  className="top-item-img"
+                />
               </div>
             </div>
           </div>
-
           {/* 5 featured products */}
           <div className="section-grid-30px pt-[30px] pb-[50px]">
-            {/* Product 1–5 */}
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
-                <img src="assets/images/topcellphone2.png" alt="BOSO Headphone" className="product-img" />
-              </a>
+              <Link to="/product/1">
+                <img
+                  src="assets/images/topcellphone2.png"
+                  alt="BOSO Headphone"
+                  className="product-img"
+                />
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
-                $569.00
-                <span className="product-old-price">$759.00</span>
+                $569.00 <span className="product-old-price ml-2">$759.00</span>
               </p>
               <div className="flex gap-2 mt-4 text-left">
                 <span className="tag-green">FREE SHIPPING</span>
                 <span className="tag-red">FREE GIFT</span>
               </div>
             </div>
-
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
-                <img src="assets/images/topcellphone2.png" alt="BOSO Headphone" className="product-img" />
-              </a>
+              <Link to="/product/1">
+                <img
+                  src="assets/images/topcellphone2.png"
+                  alt="BOSO Headphone"
+                  className="product-img"
+                />
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
-                $569.00
-                <span className="product-old-price">$759.00</span>
+                $569.00 <span className="product-old-price ml-2">$759.00</span>
               </p>
               <div className="flex gap-2 mt-4 text-left">
                 <span className="tag-green">FREE SHIPPING</span>
                 <span className="tag-red">FREE GIFT</span>
               </div>
             </div>
-
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
-                <img src="assets/images/topcellphone2.png" alt="BOSO Headphone" className="product-img" />
-              </a>
+              <Link to="/product/1">
+                <img
+                  src="assets/images/topcellphone2.png"
+                  alt="BOSO Headphone"
+                  className="product-img"
+                />
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
-                $569.00
-                <span className="product-old-price">$759.00</span>
+                $569.00 <span className="product-old-price ml-2">$759.00</span>
               </p>
               <div className="flex gap-2 mt-4 text-left">
                 <span className="tag-green">FREE SHIPPING</span>
                 <span className="tag-red">FREE GIFT</span>
               </div>
             </div>
-
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
-                <img src="assets/images/topcellphone2.png" alt="BOSO Headphone" className="product-img" />
-              </a>
+              <Link to="/product/1">
+                <img
+                  src="assets/images/topcellphone2.png"
+                  alt="BOSO Headphone"
+                  className="product-img"
+                />
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
-                $569.00
-                <span className="product-old-price">$759.00</span>
+                $569.00 <span className="product-old-price ml-2">$759.00</span>
               </p>
               <div className="flex gap-2 mt-4 text-left">
                 <span className="tag-green">FREE SHIPPING</span>
                 <span className="tag-red">FREE GIFT</span>
               </div>
             </div>
-
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
-                <img src="assets/images/topcellphone2.png" alt="BOSO Headphone" className="product-img" />
-              </a>
+              <Link to="/product/1">
+                <img
+                  src="assets/images/topcellphone2.png"
+                  alt="BOSO Headphone"
+                  className="product-img"
+                />
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
-                $569.00
-                <span className="product-old-price">$759.00</span>
+                $569.00 <span className="product-old-price ml-2">$759.00</span>
               </p>
               <div className="flex gap-2 mt-4 text-left">
                 <span className="tag-green">FREE SHIPPING</span>
@@ -542,7 +571,9 @@ const HomePage = () => {
             <h2 className="text-[18px] font-bold ml-[30px]">
               BEST LAPTOPS &amp; COMPUTERS
             </h2>
-            <a className="text-[13px] text-[#666666] mr-[46px]">View All</a>
+            <Link to="/best-laptops" className="text-[13px] text-[#666666] mr-[46px]">
+              View All
+            </Link>
           </div>
 
           {/* Top section: 6 small product items + banner */}
@@ -571,56 +602,56 @@ const HomePage = () => {
               </div>
               <div className="top-item">
                 <div className="text-left">
-                  <p className="top-item-title">iPhone (iOS)</p>
-                  <p className="top-item-sub">18 items</p>
+                  <p className="top-item-title">MacBook Pro</p>
+                  <p className="top-item-sub">12 items</p>
                 </div>
                 <img
                   src="assets/images/bestlaptop1.png"
-                  alt="iPhone Series"
+                  alt="MacBook Pro"
                   className="top-item-img"
                 />
               </div>
               <div className="top-item">
                 <div className="text-left">
-                  <p className="top-item-title">iPhone (iOS)</p>
-                  <p className="top-item-sub">18 items</p>
+                  <p className="top-item-title">Dell XPS</p>
+                  <p className="top-item-sub">10 items</p>
                 </div>
                 <img
                   src="assets/images/bestlaptop1.png"
-                  alt="iPhone Series"
+                  alt="Dell XPS"
                   className="top-item-img"
                 />
               </div>
               <div className="top-item">
                 <div className="text-left">
-                  <p className="top-item-title">iPhone (iOS)</p>
-                  <p className="top-item-sub">18 items</p>
+                  <p className="top-item-title">HP Spectre</p>
+                  <p className="top-item-sub">8 items</p>
                 </div>
                 <img
                   src="assets/images/bestlaptop1.png"
-                  alt="iPhone Series"
+                  alt="HP Spectre"
                   className="top-item-img"
                 />
               </div>
               <div className="top-item">
                 <div className="text-left">
-                  <p className="top-item-title">iPhone (iOS)</p>
-                  <p className="top-item-sub">18 items</p>
+                  <p className="top-item-title">Lenovo ThinkPad</p>
+                  <p className="top-item-sub">14 items</p>
                 </div>
                 <img
                   src="assets/images/bestlaptop1.png"
-                  alt="iPhone Series"
+                  alt="Lenovo ThinkPad"
                   className="top-item-img"
                 />
               </div>
               <div className="top-item">
                 <div className="text-left">
-                  <p className="top-item-title">iPhone (iOS)</p>
-                  <p className="top-item-sub">18 items</p>
+                  <p className="top-item-title">Asus ZenBook</p>
+                  <p className="top-item-sub">11 items</p>
                 </div>
                 <img
                   src="assets/images/bestlaptop1.png"
-                  alt="iPhone Series"
+                  alt="Asus ZenBook"
                   className="top-item-img"
                 />
               </div>
@@ -631,13 +662,13 @@ const HomePage = () => {
           <div className="section-grid-30px pt-[30px] pb-[50px]">
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
+              <Link to="/product/boso-2-wireless" >
                 <img
                   src="assets/images/bestlaptop2.png"
                   alt="BOSO Headphone"
                   className="product-img"
                 />
-              </a>
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
                 $569.00 <span className="product-old-price ml-2">$759.00</span>
@@ -650,13 +681,13 @@ const HomePage = () => {
 
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
+              <Link to="/product/boso-2-wireless">
                 <img
                   src="assets/images/bestlaptop2.png"
                   alt="BOSO Headphone"
                   className="product-img"
                 />
-              </a>
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
                 $569.00 <span className="product-old-price ml-2">$759.00</span>
@@ -669,13 +700,13 @@ const HomePage = () => {
 
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
+              <Link to="/product/boso-2-wireless">
                 <img
                   src="assets/images/bestlaptop2.png"
                   alt="BOSO Headphone"
                   className="product-img"
                 />
-              </a>
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
                 $569.00 <span className="product-old-price ml-2">$759.00</span>
@@ -688,13 +719,13 @@ const HomePage = () => {
 
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
+              <Link to="/product/boso-2-wireless">
                 <img
                   src="assets/images/bestlaptop2.png"
                   alt="BOSO Headphone"
                   className="product-img"
                 />
-              </a>
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
                 $569.00 <span className="product-old-price ml-2">$759.00</span>
@@ -707,13 +738,13 @@ const HomePage = () => {
 
             <div className="product-card">
               <div className="badge-save">SAVE $199.00</div>
-              <a href="">
+              <Link to="/product/boso-2-wireless">
                 <img
                   src="assets/images/bestlaptop2.png"
                   alt="BOSO Headphone"
                   className="product-img"
                 />
-              </a>
+              </Link>
               <p className="product-name">BOSO 2 Wireless On Ear Headphone</p>
               <p className="product-price">
                 $569.00 <span className="product-old-price ml-2">$759.00</span>
@@ -731,9 +762,9 @@ const HomePage = () => {
           {/* Tiêu đề */}
           <div className="flex justify-between mb-[30px] pt-[30px]">
             <h2 className="text-[18px] font-bold ml-[30px]">BRAND NEW FOR YOU</h2>
-            <a href="#" className="text-[13px] text-[#666666] mr-[46px]">
+            <Link to="#" className="text-[13px] text-[#666666] mr-[46px]">
               View All
-            </a>
+            </Link>
           </div>
           {/* Danh sách 4 brand */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 px-6 pb-7">
