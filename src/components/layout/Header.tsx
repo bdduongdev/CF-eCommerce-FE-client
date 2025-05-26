@@ -64,7 +64,7 @@ export default function Header() {
               </Link>
               <ul className="absolute top-full left-0 hidden group-hover:flex flex-col bg-[#EEEEEE] text-black w-[200px] max-w-[100vw] shadow-lg rounded-md z-20">
                 <li>
-                  <Link to="#" className="block px-4 py-2 hover:bg-gray-300">
+                  <Link to="/products" className="block px-4 py-2 hover:bg-gray-300">
                     Product A
                   </Link>
                 </li>
