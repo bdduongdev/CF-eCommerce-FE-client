@@ -91,14 +91,16 @@ export default function Header() {
         {/* ICONS */}
         <div className="hidden md:flex items-center space-x-[15px]">
           <div className="icon-btn">
-            <User className="h-5 w-5" />
+            <Search className="h-5 w-5" />
           </div>
           <div className="icon-btn">
             <Heart className="h-5 w-5" />
           </div>
+          <Link to="/profile">
           <div className="icon-btn">
-            <Search className="h-5 w-5" />
+            <User className="h-5 w-5" />
           </div>
+          </Link>
           <div className="mr-5">
             <p className="text-[11px] text-[#666666]">WELCOME</p>
             <div className="flex space-x-2 text-[14px] font-bold text-black">
