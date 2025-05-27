@@ -81,7 +81,7 @@ export default function Header() {
               </ul>
             </li>
             <li>
-              <Link to="#" className="flex items-center whitespace-nowrap">
+              <Link to="/contact" className="flex items-center whitespace-nowrap">
                 Contact
               </Link>
             </li>
