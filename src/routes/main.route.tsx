@@ -9,7 +9,7 @@ import Cart from '../pages/cart/Cart';
 import Product from '../pages/product/Product';
 import Profile from '../pages/profile/Profile';
 import Contact from '../pages/contact/Contact';
-import Review from '../pages/review/Review';
+import Checkout from '../pages/checkout/Checkout';
 
 
 export const mainRoutes: RouteObject[] = [
@@ -21,9 +21,9 @@ export const mainRoutes: RouteObject[] = [
       { path: '/products', element: <Product /> }, 
       { path: '/product', element: <ProductDetail /> }, // /product/:id 
       { path: '/profile', element: <Profile /> },
-      { path: '/review', element: <Review /> },
       { path: '/contact', element: <Contact /> },
       { path: '/cart', element: <Cart /> },
+      { path: '/checkout', element: <Checkout /> },
       { path: 'register', element: <Register /> },
       { path: 'login', element: <Login /> },
     ],
