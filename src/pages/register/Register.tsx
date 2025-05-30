@@ -6,7 +6,7 @@ const Register = () => {
         <>
             <main className="bg-[#e2e4eb] py-4">
                 {/* Breadcrumb */}
-                <section className="bg-white flex items-center rounded-md shadow-md h-[80px] mb-4">
+                <section className="bg-white flex items-center rounded-md h-[80px] mb-4">
                     <div className="ml-[20px] text-[14px] font-bold text-[#999999]">
                         <Link to="/">Home</Link> / <Link to="/pages">Pages</Link> /{" "}
                         <Link to="/register" className="text-black">Register</Link>
@@ -14,7 +14,7 @@ const Register = () => {
                 </section>
 
                 {/* Register section */}
-                <section className="bg-white rounded-md shadow-md flex flex-col md:flex-row overflow-hidden">
+                <section className="bg-white rounded-md flex flex-col md:flex-row overflow-hidden">
                     {/* Cột ảnh */}
                     <div className="w-full md:w-1/2 hidden md:block">
                         <img
