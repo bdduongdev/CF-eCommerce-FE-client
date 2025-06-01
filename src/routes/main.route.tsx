@@ -10,6 +10,7 @@ import Product from '../pages/product/Product';
 import Profile from '../pages/profile/Profile';
 import Contact from '../pages/contact/Contact';
 import Checkout from '../pages/checkout/Checkout';
+import Wishlist from '../pages/wishlist/Wishlist';
 
 
 export const mainRoutes: RouteObject[] = [
@@ -22,6 +23,7 @@ export const mainRoutes: RouteObject[] = [
       { path: '/product', element: <ProductDetail /> }, // /product/:id 
       { path: '/profile', element: <Profile /> },
       { path: '/contact', element: <Contact /> },
+      { path: '/wishlist', element: <Wishlist /> },
       { path: '/cart', element: <Cart /> },
       { path: '/checkout', element: <Checkout /> },
       { path: 'register', element: <Register /> },

@@ -40,7 +40,7 @@ const HomePage = () => {
         </section>
 
         {/* sản phẩm best seller  */}
-        <section className="bg-white rounded-xl px-[30px] pt-[30px] pb-[50px] shadow-md mb-4">
+        <section className="bg-white rounded-xl px-[30px] pt-[30px] pb-[50px] mb-4">
           {/* loại sp and view all */}
           <div className="best-seller-header">
             <div className="best-seller-tabs">
