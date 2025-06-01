@@ -356,6 +356,13 @@
   @apply lg:col-span-2;
 }
 
-
+/* scroll style nhẹ */
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
 
 
