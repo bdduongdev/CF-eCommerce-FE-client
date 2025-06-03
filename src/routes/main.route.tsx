@@ -11,6 +11,9 @@ import Profile from '../pages/profile/Profile';
 import Contact from '../pages/contact/Contact';
 import Checkout from '../pages/checkout/Checkout';
 import Wishlist from '../pages/wishlist/Wishlist';
+import FormInfor from '../components/profile/FormInfor';
+import Address from '../components/profile/Address';
+import ChangePassword from '../components/profile/ChangePassword';
 
 
 export const mainRoutes: RouteObject[] = [
@@ -19,9 +22,18 @@ export const mainRoutes: RouteObject[] = [
     element: <ClientLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: '/products', element: <Product /> }, 
+      { path: '/products', element: <Product /> },
       { path: '/product', element: <ProductDetail /> }, // /product/:id 
-      { path: '/profile', element: <Profile /> },
+      {
+        path: '/profile',
+        element: <Profile />,
+        children: [
+          { index: true, element: <FormInfor /> },
+          { path: 'address', element: <Address /> },
+          // { path: 'orders', element: <MyOrders /> },
+          { path: 'change-password', element: <ChangePassword /> },
+        ],
+      },
       { path: '/contact', element: <Contact /> },
       { path: '/wishlist', element: <Wishlist /> },
       { path: '/cart', element: <Cart /> },
