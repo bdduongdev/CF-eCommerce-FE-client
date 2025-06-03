@@ -30,14 +30,14 @@ const AvtAndSideBar = () => {
                         <span className="text-xl">➜</span>
                     </Link>
                     <Link
-                        to=""
+                        to="/profile/address"
                         className="w-full flex items-center justify-between px-4 py-3 text-black bg-white text-[14px] rounded-md"
                     >
                         My address
                         <span className="text-xl">➜</span>
                     </Link>
                     <Link
-                        to=""
+                        to="/profile/change-password"
                         className="w-full flex items-center justify-between px-4 py-3 text-black bg-white text-[14px] rounded-md"
                     >
                         Change password
