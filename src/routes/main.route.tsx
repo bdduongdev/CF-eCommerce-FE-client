@@ -23,7 +23,7 @@ export const mainRoutes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: '/products', element: <Product /> },
-      { path: '/product', element: <ProductDetail /> }, // /product/:id 
+      { path: '/products/:id', element: <ProductDetail /> },
       {
         path: '/profile',
         element: <Profile />,

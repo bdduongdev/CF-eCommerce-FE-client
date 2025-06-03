@@ -1,127 +1,55 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
 
-const ProductHome = () => {
-    return (
-        <>
-            <div className="best-seller-grid">
-                {/* Product 1 */}
-                <div className="best-seller-item">
-                    {/* SAVE $ Badge */}
-                    <div className="best-seller-badge">SAVE $199.00</div>
-                    <Link to="">
-                        <img
-                            src="assets/images/bestsl1.png"
-                            alt="BOSO Headphone"
-                            className="best-seller-image"
-                        />
-                    </Link>
-                    <p className="best-seller-name">
-                        BOSO 2 Wireless On Ear Headphone
-                    </p>
-                    <p className="best-seller-price">
-                        $569.00
-                        <span className="best-seller-old-price">$759.00</span>
-                    </p>
-                    <div className="best-seller-tags">
-                        <span className="best-seller-tag-green">FREE SHIPPING</span>
-                        <span className="best-seller-tag-red">FREE GIFT</span>
-                    </div>
-                </div>
-
-                {/* Product 2 */}
-                <div className="best-seller-item">
-                    <div className="best-seller-badge">SAVE $199.00</div>
-                    <Link to="">
-                        <img
-                            src="assets/images/bestsl1.png"
-                            alt="BOSO Headphone"
-                            className="best-seller-image"
-                        />
-                    </Link>
-                    <p className="best-seller-name">
-                        BOSO 2 Wireless On Ear Headphone
-                    </p>
-                    <p className="best-seller-price">
-                        $569.00
-                        <span className="best-seller-old-price">$759.00</span>
-                    </p>
-                    <div className="best-seller-tags">
-                        <span className="best-seller-tag-green">FREE SHIPPING</span>
-                        <span className="best-seller-tag-red">FREE GIFT</span>
-                    </div>
-                </div>
-
-                {/* Product 3 */}
-                <div className="best-seller-item">
-                    <div className="best-seller-badge">SAVE $199.00</div>
-                    <Link to="">
-                        <img
-                            src="assets/images/bestsl1.png"
-                            alt="BOSO Headphone"
-                            className="best-seller-image"
-                        />
-                    </Link>
-                    <p className="best-seller-name">
-                        BOSO 2 Wireless On Ear Headphone
-                    </p>
-                    <p className="best-seller-price">
-                        $569.00
-                        <span className="best-seller-old-price">$759.00</span>
-                    </p>
-                    <div className="best-seller-tags">
-                        <span className="best-seller-tag-green">FREE SHIPPING</span>
-                        <span className="best-seller-tag-red">FREE GIFT</span>
-                    </div>
-                </div>
-
-                {/* Product 4 */}
-                <div className="best-seller-item">
-                    <div className="best-seller-badge">SAVE $199.00</div>
-                    <Link to="">
-                        <img
-                            src="assets/images/bestsl1.png"
-                            alt="BOSO Headphone"
-                            className="best-seller-image"
-                        />
-                    </Link>
-                    <p className="best-seller-name">
-                        BOSO 2 Wireless On Ear Headphone
-                    </p>
-                    <p className="best-seller-price">
-                        $569.00
-                        <span className="best-seller-old-price">$759.00</span>
-                    </p>
-                    <div className="best-seller-tags">
-                        <span className="best-seller-tag-green">FREE SHIPPING</span>
-                        <span className="best-seller-tag-red">FREE GIFT</span>
-                    </div>
-                </div>
-                {/* Product 5 */}
-                <div className="best-seller-item">
-                    <div className="best-seller-badge">SAVE $199.00</div>
-                    <Link to="">
-                        <img
-                            src="assets/images/bestsl1.png"
-                            alt="BOSO Headphone"
-                            className="best-seller-image"
-                        />
-                    </Link>
-                    <p className="best-seller-name">
-                        BOSO 2 Wireless On Ear Headphone
-                    </p>
-                    <p className="best-seller-price">
-                        $569.00
-                        <span className="best-seller-old-price">$759.00</span>
-                    </p>
-                    <div className="best-seller-tags">
-                        <span className="best-seller-tag-green">FREE SHIPPING</span>
-                        <span className="best-seller-tag-red">FREE GIFT</span>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+interface Product {
+  _id: string;
+  product_name: string;
+  price: number;
+  image_url?: string;
 }
 
-export default ProductHome
+const ProductHome = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get('http://localhost:8888/api/products');
+        setProducts(res.data.data.products); // Adjust if the API structure differs
+      } catch (error) {
+        console.error('Lỗi khi lấy sản phẩm:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  return (
+    <div className="best-seller-grid">
+      {products.slice(0, 5).map((product) => (
+        <div className="best-seller-item" key={product._id}>
+          <div className="best-seller-badge">SAVE ${199}</div>
+          <Link to={`/products/${product._id}`}>
+            <img
+              src={product.image_url || 'assets/images/default.png'}
+              alt={product.product_name}
+              className="best-seller-image"
+            />
+          </Link>
+          <p className="best-seller-name">{product.product_name}</p>
+          <p className="best-seller-price">
+            ${product.price - 1000}
+            <span className="best-seller-old-price">${product.price}</span>
+          </p>
+          <div className="best-seller-tags">
+            <span className="best-seller-tag-green">FREE SHIPPING</span>
+            <span className="best-seller-tag-red">FREE GIFT</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
+export default ProductHome;
