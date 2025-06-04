@@ -16,7 +16,7 @@ const ProductHome = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get('http://localhost:8888/api/products');
-        setProducts(res.data.data.products); // Adjust if the API structure differs
+        setProducts(res.data.data.products); 
       } catch (error) {
         console.error('Lỗi khi lấy sản phẩm:', error);
       }
