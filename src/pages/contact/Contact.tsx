@@ -2,12 +2,13 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import FormContact from '../../components/contact/FormContact'
 import CompanyInfor from '../../components/contact/CompanyInfor'
+import GoogleMap from '../../components/contact/GoogleMap'
 
 const Contact = () => {
     return (
         <>
             <main className="bg-[#e2e4eb] py-5">
-                <section className="p-[30px] bg-white rounded-xl flex flex-col md:flex-row gap-[30px]">
+                <section className="p-[30px] bg-white rounded-xl flex flex-col md:flex-row gap-[30px] mb-4">
                     {/* Left Side: Contact Form */}
                     <div className="w-full md:w-3/5">
                         <h2 className="text-[18px] font-bold mb-12">READY TO WORK WITH US</h2>
@@ -116,6 +117,9 @@ const Contact = () => {
                     {/* Right Side: Company Info */}
                     <CompanyInfor />
                 </section>
+
+                <GoogleMap />
+
             </main>
         </>
     )
