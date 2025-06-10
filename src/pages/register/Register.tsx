@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 
@@ -13,6 +13,7 @@ type FormData = {
 };
 
 const Register = () => {
+  const navigate  = useNavigate() ; 
   const {
     register,
     handleSubmit,
@@ -25,6 +26,7 @@ const Register = () => {
     try {
       const response = await axios.post('http://localhost:8888/api/auth/register', data);
       alert('Đăng ký thành công') ; 
+      navigate("/verify-email");
       console.log('Đăng ký thành công:', response.data);
       reset();
     } catch (error: any) {

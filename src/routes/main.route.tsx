@@ -14,6 +14,8 @@ import Wishlist from '../pages/wishlist/Wishlist';
 import FormInfor from '../components/profile/FormInfor';
 import Address from '../components/profile/Address';
 import ChangePassword from '../components/profile/ChangePassword';
+import VerifyEmail from '../pages/register/VerifyEmail';
+import ForgotPassword from '../components/profile/ForgotPassword';
 
 
 export const mainRoutes: RouteObject[] = [
@@ -32,13 +34,18 @@ export const mainRoutes: RouteObject[] = [
           { path: 'address', element: <Address /> },
           // { path: 'orders', element: <MyOrders /> },
           { path: 'change-password', element: <ChangePassword /> },
+          { path: 'forgot-password', element: <ForgotPassword /> },
         ],
       },
       { path: '/contact', element: <Contact /> },
       { path: '/wishlist', element: <Wishlist /> },
       { path: '/cart', element: <Cart /> },
       { path: '/checkout', element: <Checkout /> },
+
+
+      //auth
       { path: 'register', element: <Register /> },
+      { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'login', element: <Login /> },
     ],
   },
