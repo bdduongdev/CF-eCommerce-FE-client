@@ -39,8 +39,7 @@ const ProductHome = () => {
           </Link>
           <p className="best-seller-name">{product.product_name}</p>
           <p className="best-seller-price">
-            ${product.price - 1000}
-            <span className="best-seller-old-price">${product.price}</span>
+            ${product.price}
           </p>
           <div className="best-seller-tags">
             <span className="best-seller-tag-green">FREE SHIPPING</span>
