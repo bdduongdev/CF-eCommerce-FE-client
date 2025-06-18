@@ -65,18 +65,21 @@ export default function Header() {
         <nav className="hidden md:flex items-center text-black font-bold text-[15px] flex-1 justify-center">
           <ul className="flex space-x-5 items-center">
             <li><Link to="/">Home</Link></li>
-            <li><Link to="#">Pages</Link></li>
+            <li><Link to="#">About</Link></li>
             <li className="relative group">
-              <Link to="#" className="flex items-center">
+              <Link to="/products" className="flex items-center">
                 Products <ChevronDown className="ml-1 h-4 w-4" />
               </Link>
               <ul className="absolute top-full left-0 hidden group-hover:flex flex-col bg-[#EEEEEE] w-[200px] shadow-lg rounded-md z-20">
-                <li><Link to="/products" className="block px-4 py-2 hover:bg-gray-300">Product A</Link></li>
-                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Product B</Link></li>
-                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Product C</Link></li>
+                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Name Category</Link></li>
+                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Name Category</Link></li>
+                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Name Category</Link></li>
               </ul>
             </li>
+            <li><Link to="/blog">Blog</Link></li>
+            <li><Link to="/support">Support</Link></li>
             <li><Link to="/contact">Contact</Link></li>
+            <li><Link to="/privacy-policy">Privacy Policy</Link></li>
           </ul>
         </nav>
 
