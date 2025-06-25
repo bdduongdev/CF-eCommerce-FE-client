@@ -17,7 +17,6 @@ import ChangePassword from '../components/profile/ChangePassword';
 import VerifyEmail from '../pages/register/VerifyEmail';
 import ForgotPassword from '../components/profile/ForgotPassword';
 
-
 export const mainRoutes: RouteObject[] = [
   {
     path: '/',
@@ -25,14 +24,13 @@ export const mainRoutes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: '/products', element: <Product /> },
-      { path: '/products/:id', element: <ProductDetail /> },
+      { path: '/products/:slug', element: <ProductDetail /> }, // ✅ updated to use slug
       {
         path: '/profile',
         element: <Profile />,
         children: [
           { index: true, element: <FormInfor /> },
           { path: 'address', element: <Address /> },
-          // { path: 'orders', element: <MyOrders /> },
           { path: 'change-password', element: <ChangePassword /> },
           { path: 'forgot-password', element: <ForgotPassword /> },
         ],
@@ -42,8 +40,7 @@ export const mainRoutes: RouteObject[] = [
       { path: '/cart', element: <Cart /> },
       { path: '/checkout', element: <Checkout /> },
 
-
-      //auth
+      // auth
       { path: 'register', element: <Register /> },
       { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'login', element: <Login /> },
