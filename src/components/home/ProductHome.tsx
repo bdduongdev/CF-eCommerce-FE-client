@@ -4,9 +4,18 @@ import axios from 'axios';
 
 interface Product {
   _id: string;
-  product_name: string;
   price: number;
   image_url?: string;
+  product: {
+    product_name: string;
+    slug: string; 
+  };
+  color: {
+    color_name: string;
+  };
+  storage: {
+    storage_name: string;
+  };
 }
 
 const ProductHome = () => {
@@ -16,7 +25,7 @@ const ProductHome = () => {
     const fetchProducts = async () => {
       try {
         const res = await axios.get('http://localhost:8888/api/products');
-        setProducts(res.data.data.products); 
+        setProducts(res.data.data.products);
       } catch (error) {
         console.error('Lỗi khi lấy sản phẩm:', error);
       }
@@ -30,17 +39,17 @@ const ProductHome = () => {
       {products.slice(0, 5).map((product) => (
         <div className="best-seller-item" key={product._id}>
           <div className="best-seller-badge">SAVE ${199}</div>
-          <Link to={`/products/${product._id}`}>
+          <Link to={`/products/${product.product.slug}`}>
             <img
               src={product.image_url || 'assets/images/default.png'}
-              alt={product.product_name}
+              alt={`${product.product.product_name} ${product.color.color_name} ${product.storage.storage_name}`}
               className="best-seller-image"
             />
           </Link>
-          <p className="best-seller-name">{product.product_name}</p>
-          <p className="best-seller-price">
-            ${product.price}
+          <p className="best-seller-name">
+            {product.product.product_name} {product.color.color_name} {product.storage.storage_name}
           </p>
+          <p className="best-seller-price">${product.price}</p>
           <div className="best-seller-tags">
             <span className="best-seller-tag-green">FREE SHIPPING</span>
             <span className="best-seller-tag-red">FREE GIFT</span>
