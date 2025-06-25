@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import ProductInfor from '../../components/productdetail/ProductInfor'
-import axios from 'axios'
+import React, { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import ProductInfor from '../../components/productdetail/ProductInfor';
+import axios from 'axios';
 import Tab from '../../components/productdetail/Tab';
 
 const ProductDetail = () => {
@@ -17,24 +17,33 @@ const ProductDetail = () => {
 
     useEffect(() => {
         const fetchProduct = async () => {
+            setLoading(true);
             try {
                 const res = await axios.get(`http://localhost:8888/api/products/group/${slug}`);
-                console.log("🎯 Product detail:", res.data.data);
-                setProduct(res.data.data);
+                const data = res.data.data;
+                setProduct(data);
+                setVariants(data.variants || []);
+                setColors(data.options?.colors || []);
+                setStorages(data.options?.storages || []);
+
+                // Chọn biến thể mặc định (đầu tiên)
+                if (data.variants && data.variants.length > 0) {
+                    setSelectedVariant(data.variants[0]);
+                    setSelectedColor(data.variants[0].color._id);
+                    setSelectedStorage(data.variants[0].storage._id);
+                }
             } catch (err) {
-                console.error("❌ Lỗi lấy sản phẩm:", err);
+                console.error('❌ Lỗi lấy sản phẩm:', err);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchProduct();
     }, [slug]);
 
-
+    // Khi chọn màu hoặc dung lượng, tìm biến thể phù hợp
     useEffect(() => {
-        if (!selectedColor || !selectedStorage) return;
-
+        if (!selectedColor || !selectedStorage || !variants.length) return;
         const matched = variants.find(v =>
             v.color._id === selectedColor && v.storage._id === selectedStorage
         );
@@ -145,4 +154,4 @@ const ProductDetail = () => {
     );
 };
 
-export default ProductDetail;
+export default ProductDetail; 
