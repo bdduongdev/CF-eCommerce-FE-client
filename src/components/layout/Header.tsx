@@ -26,7 +26,10 @@ export default function Header() {
   }, [])
 
   const handleLogout = () => {
-    localStorage.removeItem("user")
+    localStorage.removeItem("user") ;
+    localStorage.removeItem("accessToken") ; 
+    localStorage.removeItem("token") ;
+    localStorage.removeItem("role") ;  
     setUser(null)
     navigate("/") // hoặc navigate("/login")
   }
