@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -10,7 +10,7 @@ interface DiscountInfo {
 }
 
 interface Product {
-  _id: string; // Đảm bảo có _id nếu cần dùng
+  _id: string;
   product_name: string;
   price: number;
   total_price: number;
@@ -25,26 +25,37 @@ interface Product {
   status: string;
 }
 
+interface Variant {
+  _id: string;
+  color_id: string;
+  storage_id: string;
+  // ... các trường khác nếu cần
+}
+
 interface ProductInforProps {
   product: Product;
   colors: any[];
   storages: any[];
+  variants: Variant[]; // Thêm mảng variants
   selectedColor: string | null;
   selectedStorage: string | null;
   setSelectedColor: (id: string) => void;
   setSelectedStorage: (id: string) => void;
-  variantId: string | null; // Có thể null nếu chưa chọn đủ
+  variantId: string | null;
+  setVariantId: (id: string) => void;
 }
 
 const ProductInfor = ({
   product,
   colors,
   storages,
+  variants,
   selectedColor,
   selectedStorage,
   setSelectedColor,
   setSelectedStorage,
   variantId,
+  setVariantId,
 }: ProductInforProps) => {
   const {
     product_name,
@@ -61,6 +72,22 @@ const ProductInfor = ({
 
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Lấy variantId từ URL nếu có
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const urlVariantId = params.get("variantId");
+    if (urlVariantId && variants && variants.length > 0) {
+      const variant = variants.find(v => v._id === urlVariantId);
+      if (variant) {
+        setSelectedColor(variant.color_id);
+        setSelectedStorage(variant.storage_id);
+        setVariantId(variant._id);
+      }
+    }
+    // eslint-disable-next-line
+  }, [location.search, variants]);
 
   const increaseQuantity = () => {
     if (quantity < stock_quantity) {

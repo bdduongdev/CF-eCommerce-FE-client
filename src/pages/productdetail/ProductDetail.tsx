@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
 import ProductInfor from '../../components/productdetail/ProductInfor';
 import axios from 'axios';
 import Tab from '../../components/productdetail/Tab';
 
-// --- Type definitions for better readability ---
+// --- Type definitions ---
 interface Discount {
   discount_type: 'percentage' | 'fixed';
   discount_value: number;
@@ -25,7 +25,7 @@ interface Variant {
 interface ProductData {
   product_name: string;
   description: string;
-  category_id: any; // You can define a Category interface if needed
+  category_id: any;
   variants: Variant[];
   options: {
     colors: any[];
@@ -33,9 +33,13 @@ interface ProductData {
   };
 }
 
-
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const params = new URLSearchParams(location.search);
+  const urlVariantId = params.get("variantId");
+
   const [product, setProduct] = useState<ProductData | null>(null);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [colors, setColors] = useState<any[]>([]);
@@ -45,11 +49,11 @@ const ProductDetail = () => {
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // --- Fetch product data from API ---
+  // Fetch product data
   useEffect(() => {
+    if (!slug) return;
+    setLoading(true);
     const fetchProduct = async () => {
-      if (!slug) return;
-      setLoading(true);
       try {
         const res = await axios.get(`http://localhost:8888/api/products/group/${slug}`);
         const data = res.data.data;
@@ -59,7 +63,11 @@ const ProductDetail = () => {
         setStorages(data.options?.storages || []);
 
         if (data.variants && data.variants.length > 0) {
-          const defaultVariant = data.variants[0];
+          let defaultVariant = data.variants[0];
+          if (urlVariantId) {
+            const found = data.variants.find(v => v._id === urlVariantId);
+            if (found) defaultVariant = found;
+          }
           setSelectedVariant(defaultVariant);
           setSelectedColor(defaultVariant.color._id);
           setSelectedStorage(defaultVariant.storage._id);
@@ -71,22 +79,32 @@ const ProductDetail = () => {
       }
     };
     fetchProduct();
-  }, [slug]);
+    // eslint-disable-next-line
+  }, [slug, urlVariantId]);
 
-  // --- Update variant when color or storage changes ---
+  // Update variant when color or storage changes
   useEffect(() => {
     if (!selectedColor || !selectedStorage || !variants.length) return;
     const matched = variants.find(
       (v) => v.color._id === selectedColor && v.storage._id === selectedStorage
     );
     if (matched) {
-        setSelectedVariant(matched);
+      setSelectedVariant(matched);
     } else {
-        // Optional: handle cases where the combination doesn't exist
-        setSelectedVariant(null);
+      setSelectedVariant(null);
     }
   }, [selectedColor, selectedStorage, variants]);
 
+  // Cập nhật URL khi chọn biến thể khác
+  useEffect(() => {
+    if (selectedVariant) {
+      navigate(
+        `/products/${slug}?variantId=${selectedVariant._id}`,
+        { replace: true }
+      );
+    }
+    // eslint-disable-next-line
+  }, [selectedVariant]);
 
   if (loading) {
     return <div className="p-10 text-center">Loading...</div>;
@@ -96,7 +114,7 @@ const ProductDetail = () => {
     return <div className="p-10 text-center text-red-500">Product not found or variant unavailable.</div>;
   }
 
-  // --- Discount Calculation Logic ---
+  // Discount Calculation
   const originalPrice = selectedVariant.price;
   let finalPrice = originalPrice;
   let discountInfo: { badge: string; description: string | undefined; } | undefined = undefined;
@@ -188,4 +206,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetail; 

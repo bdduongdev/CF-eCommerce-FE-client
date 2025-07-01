@@ -71,7 +71,8 @@ const ProductHome = () => {
             {discount && (
               <div className="best-seller-badge">{discountBadge}</div>
             )}
-            <Link to={`/products/${product.product.slug}`}>
+            {/* Truyền variantId lên URL */}
+            <Link to={`/products/${product.product.slug}?variantId=${product._id}`}>
               <img
                 src={product.image_url || 'assets/images/default.png'}
                 alt={`${product.product.product_name} ${product.color.color_name} ${product.storage.storage_name}`}
