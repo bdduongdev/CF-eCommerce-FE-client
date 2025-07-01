@@ -4,7 +4,6 @@ import ProductInfor from '../../components/productdetail/ProductInfor';
 import axios from 'axios';
 import Tab from '../../components/productdetail/Tab';
 
-// --- Type definitions ---
 interface Discount {
   discount_type: 'percentage' | 'fixed';
   discount_value: number;
@@ -73,7 +72,7 @@ const ProductDetail = () => {
           setSelectedStorage(defaultVariant.storage._id);
         }
       } catch (err) {
-        console.error('❌ Lỗi lấy sản phẩm:', err);
+        console.error(' Lỗi lấy sản phẩm:', err);
       } finally {
         setLoading(false);
       }

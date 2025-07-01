@@ -60,7 +60,7 @@ const AvtAndSideBar = () => {
         <Link to="/profile" className={getLinkClasses('/profile')}>
           Account info <span className="text-xl">➜</span>
         </Link>
-        <Link to="/profile/order" className={getLinkClasses('/profile/order')}>
+        <Link to="/profile/my-order" className={getLinkClasses('/profile/my-order')}>
           My order <span className="text-xl">➜</span>
         </Link>
         <Link to="/profile/address" className={getLinkClasses('/profile/address')}>
