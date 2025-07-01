@@ -4,14 +4,17 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 type ResetForm = {
+  email: string;
   token: string;
   password: string;
   confirmPassword: string;
 };
 
 const schema = Yup.object({
+  email: Yup.string().email("Email không hợp lệ").required("Vui lòng nhập email"),
   token: Yup.string().required("Vui lòng nhập mã xác thực"),
   password: Yup.string()
     .min(6, "Mật khẩu phải có ít nhất 6 ký tự")
@@ -23,24 +26,21 @@ const schema = Yup.object({
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [message, setMessage] = useState<{ text: string; type: "success" | "error" } | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [sendingToken, setSendingToken] = useState(false);
   const [countdown, setCountdown] = useState(0);
 
-  const storedUser = localStorage.getItem("user");
-  const email = storedUser ? JSON.parse(storedUser).email : "";
-
   const {
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
     reset,
   } = useForm<ResetForm>({
     resolver: yupResolver(schema),
   });
 
-  // Countdown logic
+  // Countdown gửi lại mã
   useEffect(() => {
     if (countdown > 0) {
       const timer = setTimeout(() => setCountdown((prev) => prev - 1), 1000);
@@ -50,92 +50,82 @@ const ForgotPassword = () => {
 
   // Gửi mã xác thực
   const handleSendToken = async () => {
-    if (!email) return;
+    const email = getValues("email");
+    if (!email) {
+      toast.error(" Vui lòng nhập email trước khi gửi mã xác thực.");
+      return;
+    }
+
     setSendingToken(true);
-    setMessage(null);
     try {
       await axios.post("http://localhost:8888/api/auth/forgot-password", { email });
-      setMessage({
-        text: `✅ Mã xác thực đã được gửi đến email: ${email}`,
-        type: "success",
-      });
+      toast.success(` Mã xác thực đã được gửi đến email: ${email}`);
       setCountdown(180); // Khóa gửi lại trong 3 phút
     } catch (err: any) {
-      setMessage({
-        text: err.response?.data?.message || "❌ Gửi email thất bại.",
-        type: "error",
-      });
+      toast.error(err.response?.data?.message || " Gửi email thất bại.");
     } finally {
       setSendingToken(false);
     }
   };
 
-  // Đổi mật khẩu
+  // Gửi form đặt lại mật khẩu
   const onSubmit = async (data: ResetForm) => {
     setIsSubmitting(true);
-    setMessage(null);
     try {
       await axios.post(`http://localhost:8888/api/auth/reset-password/${data.token}`, {
         password: data.password,
         confirmPassword: data.confirmPassword,
       });
 
-      setMessage({
-        text: "✅ Đặt lại mật khẩu thành công! Đang chuyển hướng...",
-        type: "success",
-      });
+      toast.success(" Đặt lại mật khẩu thành công! Đang chuyển hướng...");
       reset();
 
-      localStorage.removeItem("user"); // Xoá thông tin đăng nhập
-
-      // chuyển hướng
       setTimeout(() => {
         navigate("/login");
         setTimeout(() => {
-          window.location.reload(); 
-        }, 100); 
+          window.location.reload();
+        }, 100);
       }, 4000);
-
     } catch (err: any) {
-      setMessage({
-        text: err.response?.data?.message || "❌ Có lỗi xảy ra khi đặt lại mật khẩu.",
-        type: "error",
-      });
+      toast.error(err.response?.data?.message || "Có lỗi xảy ra khi đặt lại mật khẩu.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-
   return (
     <div className="max-w-md mx-auto mt-10 p-6 border rounded shadow">
-      <h2 className="text-xl font-semibold mb-4">Đặt lại mật khẩu</h2>
-      <p className="text-sm mb-4">
-        Email: <strong>{email}</strong>
-      </p>
-
-      <button
-        onClick={handleSendToken}
-        disabled={sendingToken || countdown > 0}
-        className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded mb-4 text-sm"
-      >
-        {sendingToken
-          ? "Đang gửi..."
-          : countdown > 0
-            ? `Gửi lại sau ${countdown}s`
-            : "Gửi mã xác thực"}
-      </button>
-
-      {message && (
-        <div
-          className={`text-sm mb-4 ${message.type === "success" ? "text-green-600" : "text-red-600"
-            }`}
-        >
-          {message.text}
-        </div>
-      )}
+      <h2 className="text-xl font-semibold mb-4">Quên mật khẩu</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        {/* Email */}
+        <div>
+          <label className="block text-sm mb-1">Email</label>
+          <input
+            {...register("email")}
+            placeholder="Nhập email"
+            className="w-full px-3 py-2 border rounded text-sm"
+          />
+          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+        </div>
+
+        {/* Gửi mã xác thực */}
+        <div>
+          <button
+            type="button"
+            onClick={handleSendToken}
+            disabled={sendingToken || countdown > 0}
+            className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded text-sm"
+          >
+            {sendingToken
+              ? "Đang gửi..."
+              : countdown > 0
+              ? `Gửi lại sau ${countdown}s`
+              : "Gửi mã xác thực"}
+          </button>
+        </div>
+
+        {/* Mã xác thực */}
         <div>
           <label className="block text-sm mb-1">Mã xác thực</label>
           <input
@@ -146,6 +136,7 @@ const ForgotPassword = () => {
           {errors.token && <p className="text-red-500 text-sm">{errors.token.message}</p>}
         </div>
 
+        {/* Mật khẩu mới */}
         <div>
           <label className="block text-sm mb-1">Mật khẩu mới</label>
           <input
@@ -157,6 +148,7 @@ const ForgotPassword = () => {
           {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
         </div>
 
+        {/* Xác nhận mật khẩu */}
         <div>
           <label className="block text-sm mb-1">Xác nhận mật khẩu</label>
           <input
@@ -175,7 +167,7 @@ const ForgotPassword = () => {
           disabled={isSubmitting}
           className="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded text-sm w-full"
         >
-          {isSubmitting ? "Đang xử lý..." : "Đổi mật khẩu"}
+          {isSubmitting ? "Đang xử lý..." : "Đặt lại mật khẩu"}
         </button>
       </form>
     </div>

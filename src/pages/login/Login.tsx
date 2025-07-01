@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 type FormData = {
   email: string;
@@ -18,10 +19,9 @@ const Login = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
+    const toastId = toast.loading('Đang đăng nhập...'); // 👈 Loading toast
     try {
       const response = await axios.post('http://localhost:8888/api/auth/login', data);
-
-      // ✅ Sửa đúng cấu trúc response: nằm trong response.data.data
       const { accessToken, user } = response.data.data;
 
       if (accessToken) {
@@ -29,13 +29,17 @@ const Login = () => {
         localStorage.setItem('user', JSON.stringify(user));
       }
 
-      alert('Đăng nhập thành công');
-      navigate('/');
+      toast.success(' Đăng nhập thành công!', { id: toastId }); // Replace loading
       reset();
-      window.location.reload();
+
+      setTimeout(() => {
+        navigate('/');
+        window.location.reload();
+      }, 1800); // 👈 Delay trước khi chuyển trang
     } catch (error: any) {
-      console.error('Lỗi đăng nhập:', error.response?.data || error.message);
-      alert(error.response?.data?.message || 'Đăng nhập thất bại');
+      toast.error(error.response?.data?.message || ' Đăng nhập thất bại', {
+        id: toastId,
+      });
     }
   };
 
