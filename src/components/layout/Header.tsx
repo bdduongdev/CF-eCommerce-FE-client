@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { ChevronDown, Heart, Menu, Search, ShoppingBag, User } from "lucide-react"
 
@@ -11,6 +11,7 @@ type UserType = {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [user, setUser] = useState<UserType | null>(null)
+  const [cartInfo, setCartInfo] = useState({ totalQuantity: 0, totalPrice:   0 })
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,6 +24,33 @@ export default function Header() {
         setUser(null)
       }
     }
+  }, [])
+
+  // Lấy thông tin giỏ hàng từ localStorage
+  useEffect(() => {
+    const updateCartInfo = () => {
+      const cartItems = JSON.parse(localStorage.getItem("cartItems") || "[]")
+      let totalQuantity = 0
+      let totalPrice = 0
+      for (const item of cartItems) {
+        const price = item.price || (item.variant_id && item.variant_id.price) || 0
+        let finalPrice = price
+        if (item.discount) {
+          if (item.discount.discount_type === "percentage") {
+            finalPrice = Math.round(price * (1 - item.discount.discount_value / 100))
+          } else if (item.discount.discount_type === "fixed") {
+            finalPrice = Math.max(0, price - item.discount.discount_value)
+          }
+        }
+        totalQuantity += item.quantity
+        totalPrice += finalPrice * item.quantity
+      }
+      setCartInfo({ totalQuantity, totalPrice })
+    }
+    updateCartInfo()
+    // Lắng nghe sự kiện custom để cập nhật realtime nếu muốn
+    window.addEventListener("cartUpdated", updateCartInfo)
+    return () => window.removeEventListener("cartUpdated", updateCartInfo)
   }, [])
 
   const handleLogout = () => {
@@ -112,13 +140,14 @@ export default function Header() {
             )}
           </div>
 
-
           <div className="icon-btn">
             <Link to="/cart"><ShoppingBag className="h-5 w-5" /></Link>
           </div>
           <div>
-            <p className="text-[11px] text-[#666666]">CART</p>
-            <p className="text-[14px] font-bold text-black">$1,689.00</p>
+            <p className="text-[11px] text-[#666666]">CART ({cartInfo.totalQuantity})</p>
+            <p className="text-[14px] font-bold text-black">
+              {cartInfo.totalPrice.toLocaleString()}₫
+            </p>
           </div>
         </div>
       </section>
@@ -194,4 +223,4 @@ export default function Header() {
       )}
     </header>
   )
-}
+} 

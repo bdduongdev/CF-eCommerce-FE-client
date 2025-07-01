@@ -1,33 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
+
+// --- INTERFACES ---
+interface DiscountInfo {
+  badge: string;
+  description?: string;
+}
 
 interface Product {
   product_name: string;
   price: number;
+  total_price: number;
+  original_price?: number;
+  discount_info?: DiscountInfo;
   description: string;
   category_id: {
     category_name: string;
   };
-  color_id?: {
-    _id: string;
-    color_name: string;
-    price?: number;
-  };
-  storage_id?: {
-    _id: string;
-    storage_name: string;
-    price?: number;
-  };
   image_url: string;
   stock_quantity: number;
   status: string;
-  total_price: number;
 }
 
 interface ProductInforProps {
   product: Product;
-  variants: any[];
   colors: any[];
   storages: any[];
   selectedColor: string | null;
@@ -39,7 +37,6 @@ interface ProductInforProps {
 
 const ProductInfor = ({
   product,
-  variants,
   colors,
   storages,
   selectedColor,
@@ -50,7 +47,10 @@ const ProductInfor = ({
 }: ProductInforProps) => {
   const {
     product_name,
+    price,
     total_price,
+    original_price,
+    discount_info,
     description,
     category_id,
     image_url,
@@ -59,13 +59,13 @@ const ProductInfor = ({
   } = product;
 
   const [quantity, setQuantity] = useState(1);
-  const [availableStock, setAvailableStock] = useState(stock_quantity);
+  const navigate = useNavigate();
 
   const increaseQuantity = () => {
-    if (quantity < availableStock) {
+    if (quantity < stock_quantity) {
       setQuantity(quantity + 1);
     } else {
-      toast.warning(`⚠️ Tối đa ${availableStock} sản phẩm.`);
+      toast.warning(`Tối đa ${stock_quantity} sản phẩm.`);
     }
   };
 
@@ -75,43 +75,52 @@ const ProductInfor = ({
     }
   };
 
+  const handleBuyNow = () => {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      toast.error("Bạn cần đăng nhập để mua hàng!");
+      return;
+    }
+    if (quantity > stock_quantity) {
+      toast.error(`Số lượng tồn kho không đủ. Chỉ còn ${stock_quantity} sản phẩm.`);
+      return;
+    }
+    const productToBuy = {
+      variantId,
+      quantity,
+      product_name,
+      image_url,
+      price: total_price,
+    };
+    navigate("/checkout", { state: { items: [productToBuy], from: "buyNow" } });
+  };
+
   const handleAddToCart = async () => {
     const token = localStorage.getItem("accessToken");
-
     if (!token) {
-      toast.error("❌ Bạn cần đăng nhập để thêm vào giỏ hàng!");
+      toast.error("Bạn cần đăng nhập để thêm vào giỏ hàng!");
       return;
     }
-
-    if (quantity > availableStock) {
-      toast.error(`❌ Số lượng tồn kho không đủ. Chỉ còn ${availableStock} sản phẩm.`);
+    if (quantity > stock_quantity) {
+      toast.error(`Số lượng tồn kho không đủ. Chỉ còn ${stock_quantity} sản phẩm.`);
       return;
     }
-
     try {
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:8888/api/cart/add",
-        {
-          variantId,
-          quantity,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { variantId, quantity },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-
-      //  Thêm thành công
-      toast.success(" Đã thêm vào giỏ hàng!");
-      setAvailableStock((prev) => prev - quantity);
+      const res = await axios.get('http://localhost:8888/api/cart/', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      localStorage.setItem('cartItems', JSON.stringify(res.data.data.items || []));
+      window.dispatchEvent(new Event('cartUpdated'));
+      toast.success("Đã thêm vào giỏ hàng!");
+      navigate("/cart");
     } catch (error: any) {
-      console.error("❌ Lỗi thêm vào giỏ hàng:", error?.response?.data || error);
-      toast.error(
-        `❌ Thêm vào giỏ hàng thất bại! ${
-          error?.response?.data?.message || "Vui lòng thử lại."
-        }`
-      );
+      console.error("Lỗi thêm vào giỏ hàng:", error?.response?.data || error);
+      toast.error(`Thêm vào giỏ hàng thất bại! ${error?.response?.data?.message || "Vui lòng thử lại."}`);
     }
   };
 
@@ -119,7 +128,7 @@ const ProductInfor = ({
     <section className="bg-white rounded-xl px-4 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="flex justify-center items-center">
         <img
-          src={image_url}
+          src={image_url || '/default-image.png'}
           alt={product_name}
           className="w-[70%] h-auto max-h-[400px] object-contain rounded-md"
         />
@@ -127,9 +136,27 @@ const ProductInfor = ({
 
       <div>
         <h3 className="text-lg font-bold mb-2">{product_name}</h3>
-        <p className="text-2xl font-semibold text-black mb-4">
-          {total_price.toLocaleString()}₫
-        </p>
+
+        {/* --- UPDATED PRICE DISPLAY --- */}
+        <div className="flex items-baseline gap-3 mb-4">
+          <p className="text-2xl font-semibold text-red-600">
+            {price.toLocaleString()}₫
+          </p>
+          {original_price && original_price !== price && (
+            <p className="text-lg font-normal text-gray-500 line-through">
+              {original_price.toLocaleString()}₫
+            </p>
+          )}
+        </div>
+        
+        {/* --- DISPLAY DISCOUNT BADGE AND DESCRIPTION --- */}
+        {discount_info && (
+          <div className="mb-4">
+            <span className="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">
+              {discount_info.badge}
+            </span>
+          </div>
+        )}
 
         <p className="text-sm text-gray-600 mb-4">{description}</p>
 
@@ -141,10 +168,10 @@ const ProductInfor = ({
               <button
                 key={color._id}
                 onClick={() => setSelectedColor(color._id)}
-                className={`px-3 py-2 border rounded text-sm ${
+                className={`px-3 py-2 border rounded text-sm transition-colors ${
                   selectedColor === color._id
-                    ? "border-green-600 text-green-600"
-                    : "border-gray-400"
+                    ? "border-green-600 text-green-600 bg-green-50"
+                    : "border-gray-400 hover:border-gray-600"
                 }`}
               >
                 {color.color_name}
@@ -161,10 +188,10 @@ const ProductInfor = ({
               <button
                 key={storage._id}
                 onClick={() => setSelectedStorage(storage._id)}
-                className={`px-3 py-2 border rounded text-sm ${
+                className={`px-3 py-2 border rounded text-sm transition-colors ${
                   selectedStorage === storage._id
-                    ? "border-green-600 text-green-600"
-                    : "border-gray-400"
+                    ? "border-green-600 text-green-600 bg-green-50"
+                    : "border-gray-400 hover:border-gray-600"
                 }`}
               >
                 {storage.storage_name}
@@ -188,28 +215,31 @@ const ProductInfor = ({
           <div className="flex items-center border rounded overflow-hidden">
             <button
               onClick={decreaseQuantity}
-              className="px-3 py-1 text-lg font-bold bg-gray-200"
+              className="px-3 py-1 text-lg font-bold bg-gray-200 hover:bg-gray-300 transition-colors"
             >
               -
             </button>
-            <span className="px-4">{quantity}</span>
+            <span className="px-4 py-1">{quantity}</span>
             <button
               onClick={increaseQuantity}
-              className="px-3 py-1 text-lg font-bold bg-gray-200"
+              className="px-3 py-1 text-lg font-bold bg-gray-200 hover:bg-gray-300 transition-colors"
             >
               +
             </button>
           </div>
 
           <button
-            onClick={handleAddToCart}
-            className="text-[#1ABA1A] border border-[#1ABA1A] px-4 py-2 rounded text-sm font-semibold hover:bg-[#1ABA1A] hover:text-white"
+            onClick={handleBuyNow}
+            className="text-[#1ABA1A] border border-[#1ABA1A] px-4 py-2 rounded text-sm font-semibold hover:bg-[#1ABA1A] hover:text-white transition-colors"
           >
-            <i className="fa-solid fa-plus mr-1" /> Thêm vào giỏ
+            <i className="fa-solid fa-credit-card mr-1" /> Mua ngay
           </button>
-
-          <button className="text-[#262626] border border-[#262626] px-4 py-2 rounded text-sm font-semibold hover:bg-[#262626] hover:text-white">
-            <i className="fa-solid fa-heart mr-1" /> Yêu thích
+          
+          <button
+            onClick={handleAddToCart}
+            className="text-white bg-[#1ABA1A] border border-[#1ABA1A] px-4 py-2 rounded text-sm font-semibold hover:opacity-90 transition-opacity"
+          >
+            <i className="fa-solid fa-cart-plus mr-1" /> Thêm vào giỏ
           </button>
         </div>
 
@@ -224,7 +254,7 @@ const ProductInfor = ({
             <span className="capitalize">{status}</span>
           </p>
           <p>
-            <span className="font-bold">Kho còn:</span> {availableStock}
+            <span className="font-bold">Kho còn:</span> {stock_quantity}
           </p>
         </div>
       </div>

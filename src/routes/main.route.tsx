@@ -16,6 +16,7 @@ import Address from '../components/profile/Address';
 import ChangePassword from '../components/profile/ChangePassword';
 import VerifyEmail from '../pages/register/VerifyEmail';
 import ForgotPassword from '../components/profile/ForgotPassword';
+import Success from '../pages/checkout/Success';
 
 export const mainRoutes: RouteObject[] = [
   {
@@ -39,6 +40,7 @@ export const mainRoutes: RouteObject[] = [
       { path: '/wishlist', element: <Wishlist /> },
       { path: '/cart', element: <Cart /> },
       { path: '/checkout', element: <Checkout /> },
+      { path: '/checkout/success', element: <Success /> },
 
       // auth
       { path: 'register', element: <Register /> },

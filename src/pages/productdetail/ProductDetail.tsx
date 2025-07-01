@@ -4,19 +4,51 @@ import ProductInfor from '../../components/productdetail/ProductInfor';
 import axios from 'axios';
 import Tab from '../../components/productdetail/Tab';
 
+// --- Type definitions for better readability ---
+interface Discount {
+  discount_type: 'percentage' | 'fixed';
+  discount_value: number;
+  description?: string;
+}
+
+interface Variant {
+  _id: string;
+  price: number;
+  stock_quantity: number;
+  status: string;
+  image_url?: string;
+  color: { _id: string; color_name: string };
+  storage: { _id: string; storage_name: string };
+  discounts?: Discount[];
+}
+
+interface ProductData {
+  product_name: string;
+  description: string;
+  category_id: any; // You can define a Category interface if needed
+  variants: Variant[];
+  options: {
+    colors: any[];
+    storages: any[];
+  };
+}
+
+
 const ProductDetail = () => {
-  const { slug } = useParams();
-  const [product, setProduct] = useState<any>(null);
-  const [variants, setVariants] = useState<any[]>([]);
+  const { slug } = useParams<{ slug: string }>();
+  const [product, setProduct] = useState<ProductData | null>(null);
+  const [variants, setVariants] = useState<Variant[]>([]);
   const [colors, setColors] = useState<any[]>([]);
   const [storages, setStorages] = useState<any[]>([]);
-  const [selectedVariant, setSelectedVariant] = useState<any>(null);
+  const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // --- Fetch product data from API ---
   useEffect(() => {
     const fetchProduct = async () => {
+      if (!slug) return;
       setLoading(true);
       try {
         const res = await axios.get(`http://localhost:8888/api/products/group/${slug}`);
@@ -27,9 +59,10 @@ const ProductDetail = () => {
         setStorages(data.options?.storages || []);
 
         if (data.variants && data.variants.length > 0) {
-          setSelectedVariant(data.variants[0]);
-          setSelectedColor(data.variants[0].color._id);
-          setSelectedStorage(data.variants[0].storage._id);
+          const defaultVariant = data.variants[0];
+          setSelectedVariant(defaultVariant);
+          setSelectedColor(defaultVariant.color._id);
+          setSelectedStorage(defaultVariant.storage._id);
         }
       } catch (err) {
         console.error('❌ Lỗi lấy sản phẩm:', err);
@@ -40,26 +73,64 @@ const ProductDetail = () => {
     fetchProduct();
   }, [slug]);
 
+  // --- Update variant when color or storage changes ---
   useEffect(() => {
     if (!selectedColor || !selectedStorage || !variants.length) return;
     const matched = variants.find(
       (v) => v.color._id === selectedColor && v.storage._id === selectedStorage
     );
-    if (matched) setSelectedVariant(matched);
+    if (matched) {
+        setSelectedVariant(matched);
+    } else {
+        // Optional: handle cases where the combination doesn't exist
+        setSelectedVariant(null);
+    }
   }, [selectedColor, selectedStorage, variants]);
 
-  if (loading) return <div className="p-10 text-center">Loading...</div>;
-  if (!product || !selectedVariant) return <div className="p-10 text-center text-red-500">Product not found.</div>;
+
+  if (loading) {
+    return <div className="p-10 text-center">Loading...</div>;
+  }
+
+  if (!product || !selectedVariant) {
+    return <div className="p-10 text-center text-red-500">Product not found or variant unavailable.</div>;
+  }
+
+  // --- Discount Calculation Logic ---
+  const originalPrice = selectedVariant.price;
+  let finalPrice = originalPrice;
+  let discountInfo: { badge: string; description: string | undefined; } | undefined = undefined;
+
+  const bestDiscount = selectedVariant.discounts?.length
+    ? selectedVariant.discounts.reduce((max, d) =>
+        (d.discount_value > max.discount_value) ? d : max
+      )
+    : null;
+
+  if (bestDiscount) {
+    if (bestDiscount.discount_type === 'percentage') {
+      finalPrice = Math.round(originalPrice * (1 - bestDiscount.discount_value / 100));
+      discountInfo = {
+        badge: `SALE ${bestDiscount.discount_value}%`,
+        description: bestDiscount.description,
+      };
+    } else if (bestDiscount.discount_type === 'fixed') {
+      finalPrice = Math.max(0, originalPrice - bestDiscount.discount_value);
+      discountInfo = {
+        badge: `SAVE $${new Intl.NumberFormat().format(bestDiscount.discount_value)}`,
+        description: bestDiscount.description,
+      };
+    }
+  }
 
   return (
     <main className="bg-[#e2e4eb] py-5">
       <section className="bg-white flex items-center rounded-md shadow-md h-[80px] mb-4">
         <div className="ml-[30px]">
           <Link to="/" className="text-[14px] font-bold text-[#999999]">Home</Link> /
-          <Link to="" className="text-[14px] font-bold text-[#999999]"> Shop</Link> /
-          <Link to="" className="text-[14px] font-bold text-[#999999]"> Top Cell Phones</Link> /
+          <Link to="/shop" className="text-[14px] font-bold text-[#999999]"> Shop</Link> /
           <span className="text-[14px] font-bold text-black">
-            {product.product_name}
+            {` ${product.product_name}`}
           </span>
         </div>
       </section>
@@ -67,24 +138,23 @@ const ProductDetail = () => {
       <ProductInfor
         product={{
           product_name: `${product.product_name} ${selectedVariant.color.color_name} ${selectedVariant.storage.storage_name}`,
-          price: selectedVariant.price,
-          total_price: selectedVariant.price,
+          price: finalPrice,
+          total_price: finalPrice,
+          original_price: originalPrice,
+          discount_info: discountInfo,
           description: product.description,
-          image_url: selectedVariant.image_url,
+          image_url: selectedVariant.image_url || "",
           category_id: product.category_id,
-          color_id: selectedVariant.color,
-          storage_id: selectedVariant.storage,
           stock_quantity: selectedVariant.stock_quantity,
           status: selectedVariant.status,
         }}
-        variants={variants}
         colors={colors}
         storages={storages}
         selectedColor={selectedColor}
         selectedStorage={selectedStorage}
         setSelectedColor={setSelectedColor}
         setSelectedStorage={setSelectedStorage}
-        variantId={selectedVariant._id} // ✅ truyền variantId
+        variantId={selectedVariant._id}
       />
 
       <section className="bg-white rounded-xl px-4 md:px-6 lg:px-[30px] py-6 md:py-8 lg:py-[30px] shadow-sm mb-4">
