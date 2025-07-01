@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { toast } from 'sonner';
 
 type ProfileData = {
   fullname: string;
@@ -16,6 +18,11 @@ const FormInfor = () => {
     reset,
   } = useForm<ProfileData>();
 
+  // Lấy user từ localStorage
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const userId = user?._id;
+
+  // Gán dữ liệu ban đầu
   useEffect(() => {
     const userData = localStorage.getItem('user');
     if (userData) {
@@ -27,14 +34,38 @@ const FormInfor = () => {
         address: user.address || '',
       });
     }
-  }, [reset]);
+  }, []);
 
-  const onSubmit = (data: ProfileData) => {
-    localStorage.setItem('user', JSON.stringify(data));
-    console.log('Thông tin đã lưu:', data);
-    alert('Cập nhật thành công!');
-    window.location.reload();
-  };
+const onSubmit = async (data: ProfileData) => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const token = localStorage.getItem("accessToken");
+
+    if (!token || !user._id) {
+      throw new Error("Không tìm thấy token hoặc userId");
+    }
+
+    const response = await axios.put(
+      `http://localhost:8888/api/profile/${user._id}`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    localStorage.setItem("user", JSON.stringify(response.data.data));
+    toast.success("Cập nhật thành công!");
+    // window.location.reload();
+    // Phát sự kiện custom để sidebar biết mà cập nhật lại user
+    window.dispatchEvent(new Event("userUpdated"));
+  } catch (err: any) {
+    console.error("Lỗi cập nhật:", err.response?.data || err.message);
+    toast.error(err.response?.data?.message || "Cập nhật thất bại");
+  }
+};
+
 
   return (
     <div className="w-full md:w-4/5">

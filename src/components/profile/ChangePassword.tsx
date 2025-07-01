@@ -96,13 +96,6 @@ const ChangePassword = () => {
           >
             SAVE PASSWORD
           </button>
-          <button
-            type="button"
-            onClick={() => navigate('/profile/forgot-password')}
-            className="text-sm text-blue-600 hover:underline"
-          >
-            Forgot Password?
-          </button>
         </div>
       </form>
     </div>

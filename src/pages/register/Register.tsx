@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import { toast } from 'sonner';
 
 type FormData = {
   fullname: string;
@@ -13,7 +14,7 @@ type FormData = {
 };
 
 const Register = () => {
-  const navigate  = useNavigate() ; 
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -23,17 +24,22 @@ const Register = () => {
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
+    const toastId = toast.loading('Đang xử lý đăng ký...');
     try {
-      const response = await axios.post('http://localhost:8888/api/auth/register', data);
-      alert('Đăng ký thành công') ; 
-      navigate("/verify-email");
-      console.log('Đăng ký thành công:', response.data);
+      await axios.post('http://localhost:8888/api/auth/register', data);
+
+      toast.success(' Đăng ký thành công! Vui lòng kiểm tra email.', { id: toastId });
       reset();
+
+      setTimeout(() => {
+        navigate('/verify-email');
+      }, 1800); // 👈 Delay để toast hiển thị trước khi chuyển trang
     } catch (error: any) {
-      console.error('Lỗi đăng ký:', error.response?.data || error.message);
+      toast.error(error.response?.data?.message || ' Đăng ký thất bại', {
+        id: toastId,
+      });
     }
   };
-
   return (
     <main className="bg-[#e2e4eb] py-4">
       {/* Breadcrumb */}
