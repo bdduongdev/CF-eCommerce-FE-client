@@ -75,7 +75,7 @@ const ProductDetail = () => {
           setSelectedStorage(defaultVariant.storage._id);
         }
       } catch (err) {
-        console.error('❌ Lỗi lấy sản phẩm:', err);
+        console.error(' Lỗi lấy sản phẩm:', err);
       } finally {
         setLoading(false);
       }

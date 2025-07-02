@@ -1,151 +1,155 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-const SidebarFilter = () => {
-    return (
-        <>
-            <div className="lg:col-span-3 bg-gray-200 rounded-md shadow-sm px-6 py-6">
-                {/* Header */}
-                <div className="flex items-center justify-between mb-5">
-                    <h2 className="font-bold text-[18px]">CATEGORIES</h2>
-                    <button className="text-[14px] hover:underline">Reset All</button>
-                </div>
-                {/* By Brands */}
-                <div className="my-10">
-                    <h3 className="font-bold text-[14px] mb-3">By Brands</h3>
-                    <ul className="space-y-3 text-sm text-gray-700">
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />
-                                Elemento (14)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />
-                                Apple (36)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />
-                                Microsoft (12)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />
-                                Samsung (20)
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-                {/* By Price */}
-                <div className="mb-10">
-                    <h3 className="font-bold text-[14px] mb-2">By Price</h3>
-                    <input
-                        type="range"
-                        min={0}
-                        max={10000}
-                        defaultValue={5000}
-                        className="w-full accent-green-600"
-                    />
-                    <div className="flex items-center gap-2 mt-3">
-                        <input
-                            type="text"
-                            placeholder="$0"
-                            className="w-1/2 border rounded px-2 py-1 text-sm"
-                        />
-                        <span>-</span>
-                        <input
-                            type="text"
-                            placeholder="$10000"
-                            className="w-1/2 border rounded px-2 py-1 text-sm"
-                        />
-                    </div>
-                    <button className="mt-3 bg-green-600 font-bold text-white text-[14px] px-4 py-1 rounded hover:bg-green-700 transition">
-                        GO
-                    </button>
-                </div>
-                {/* By Rating */}
-                <div className="mb-10">
-                    <h3 className="font-bold text-[14px] mb-3">By Rating</h3>
-                    <ul className="space-y-3 text-sm text-gray-700">
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />★ ★ ★ ★
-                                ★ (8)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />★ ★ ★ ★
-                                ☆ (15)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />★ ★ ★ ☆
-                                ☆ (11)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />★ ★ ☆ ☆
-                                ☆ (6)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />★ ☆ ☆ ☆
-                                ☆ (3)
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-                {/* By Color */}
-                <div className="mb-10">
-                    <h3 className="font-bold text-[14px] mb-3">By Color</h3>
-                    <div className="flex flex-wrap gap-2">
-                        <div className="w-7 h-7 rounded-full bg-black border" />
-                        <div className="w-7 h-7 rounded-full bg-red-600 border" />
-                        <div className="w-7 h-7 rounded-full bg-blue-600 border" />
-                        <div className="w-7 h-7 rounded-full bg-green-600 border" />
-                        <div className="w-7 h-7 rounded-full bg-gray-600 border" />
-                    </div>
-                </div>
-                {/* By Memory */}
-                <div className="mb-10">
-                    <h3 className="font-bold text-[14px] mb-2">By Memory</h3>
-                    <ul className="space-y-2 text-sm text-gray-700">
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />1 GB
-                                (2)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />8 GB
-                                (10)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />
-                                16 GB (6)
-                            </label>
-                        </li>
-                        <li>
-                            <label>
-                                <input type="checkbox" className="accent-green-600 mr-2" />
-                                128 GB (20)
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </>
-    )
-}
+type FilterProps = {
+  onFilterChange: (filters: any) => void;
+};
 
-export default SidebarFilter
+type Color = {
+  _id: string;
+  color_name: string;
+};
+
+type Storage = {
+  _id: string;
+  storage_name: string;
+};
+
+const SidebarFilter = ({ onFilterChange }: FilterProps) => {
+  const [priceRange, setPriceRange] = useState({ min: "", max: "" });
+  const [selectedColors, setSelectedColors] = useState<string[]>([]);
+  const [selectedStorages, setSelectedStorages] = useState<string[]>([]);
+
+  const [colors, setColors] = useState<Color[]>([]);
+  const [storages, setStorages] = useState<Storage[]>([]);
+
+  useEffect(() => {
+    const fetchOptions = async () => {
+      try {
+        const [colorRes, storageRes] = await Promise.all([
+          axios.get("http://localhost:8888/api/colors"),
+          axios.get("http://localhost:8888/api/storages"),
+        ]);
+        setColors(colorRes.data?.data || []);
+        setStorages(storageRes.data?.data || []);
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu bộ lọc:", error);
+      }
+    };
+    fetchOptions();
+  }, []);
+
+  const handleCheckboxChange = (
+    value: string,
+    selectedList: string[],
+    setSelectedList: (val: string[]) => void
+  ) => {
+    if (selectedList.includes(value)) {
+      setSelectedList(selectedList.filter((v) => v !== value));
+    } else {
+      setSelectedList([...selectedList, value]);
+    }
+  };
+
+  const handleApplyFilters = () => {
+    onFilterChange({
+      minPrice: priceRange.min,
+      maxPrice: priceRange.max,
+      color: selectedColors.join(","),
+      storage: selectedStorages.join(","),
+    });
+  };
+
+  const handleReset = () => {
+    setPriceRange({ min: "", max: "" });
+    setSelectedColors([]);
+    setSelectedStorages([]);
+    onFilterChange({});
+  };
+
+  return (
+    <div className="lg:col-span-3 bg-gray-200 rounded-md shadow-sm px-6 py-6">
+      <div className="flex items-center justify-between mb-5">
+        <h2 className="font-bold text-[18px]">FILTER</h2>
+        <button onClick={handleReset} className="text-[14px] hover:underline">
+          Reset All
+        </button>
+      </div>
+
+      {/* Price */}
+      <div className="mb-10">
+        <h3 className="font-bold text-[14px] mb-2">By Price</h3>
+        <div className="flex items-center gap-2 mt-3">
+          <input
+            type="text"
+            value={priceRange.min}
+            onChange={(e) => setPriceRange({ ...priceRange, min: e.target.value })}
+            placeholder="$ Min"
+            className="w-1/2 border rounded px-2 py-1 text-sm"
+          />
+          <span>-</span>
+          <input
+            type="text"
+            value={priceRange.max}
+            onChange={(e) => setPriceRange({ ...priceRange, max: e.target.value })}
+            placeholder="$ Max"
+            className="w-1/2 border rounded px-2 py-1 text-sm"
+          />
+        </div>
+      </div>
+
+      {/* Colors */}
+      <div className="mb-10">
+        <h3 className="font-bold text-[14px] mb-2">By Color</h3>
+        <ul className="space-y-2 text-sm text-gray-700">
+          {colors.map((color) => (
+            <li key={color._id}>
+              <label>
+                <input
+                  type="checkbox"
+                  className="accent-green-600 mr-2"
+                  checked={selectedColors.includes(color._id)}
+                  onChange={() =>
+                    handleCheckboxChange(color._id, selectedColors, setSelectedColors)
+                  }
+                />
+                {color.color_name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* Storages */}
+      <div className="mb-10">
+        <h3 className="font-bold text-[14px] mb-2">By Memory</h3>
+        <ul className="space-y-2 text-sm text-gray-700">
+          {storages.map((s) => (
+            <li key={s._id}>
+              <label>
+                <input
+                  type="checkbox"
+                  className="accent-green-600 mr-2"
+                  checked={selectedStorages.includes(s._id)}
+                  onChange={() =>
+                    handleCheckboxChange(s._id, selectedStorages, setSelectedStorages)
+                  }
+                />
+                {s.storage_name}
+              </label>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <button
+        onClick={handleApplyFilters}
+        className="mt-3 bg-green-600 font-bold text-white text-[14px] px-4 py-2 rounded hover:bg-green-700 transition w-full"
+      >
+        Apply Filters
+      </button>
+    </div>
+  );
+};
+
+export default SidebarFilter;

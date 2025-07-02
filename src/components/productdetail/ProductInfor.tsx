@@ -117,7 +117,7 @@ const ProductInfor = ({
       localStorage.setItem('cartItems', JSON.stringify(res.data.data.items || []));
       window.dispatchEvent(new Event('cartUpdated'));
       toast.success("Đã thêm vào giỏ hàng!");
-      navigate("/cart");
+      // navigate("/cart");
     } catch (error: any) {
       console.error("Lỗi thêm vào giỏ hàng:", error?.response?.data || error);
       toast.error(`Thêm vào giỏ hàng thất bại! ${error?.response?.data?.message || "Vui lòng thử lại."}`);
