@@ -1,0 +1,14 @@
+export { default as HomePage } from './home/HomePage';
+export { default as Login } from './login/Login';
+export { default as Register } from './register/Register';
+export { default as VerifyEmail } from './register/VerifyEmail';
+export { default as Product } from './product/Product';
+export { default as ProductDetail } from './productdetail/ProductDetail';
+export { default as Cart } from './cart/Cart';
+export { default as Checkout } from './checkout/Checkout';
+export { default as Success } from './checkout/Success';
+export { default as Profile } from './profile/Profile';
+export { default as MyOrders } from './profile/MyOrders';
+export { default as Wishlist } from './wishlist/Wishlist';
+export { default as Review } from './review/Review';
+export { default as Contact } from './contact/Contact';

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 
@@ -10,7 +10,6 @@ interface DiscountInfo {
 }
 
 interface Product {
-  _id: string;
   product_name: string;
   price: number;
   total_price: number;
@@ -25,37 +24,26 @@ interface Product {
   status: string;
 }
 
-interface Variant {
-  _id: string;
-  color_id: string;
-  storage_id: string;
-  // ... các trường khác nếu cần
-}
-
 interface ProductInforProps {
   product: Product;
   colors: any[];
   storages: any[];
-  variants: Variant[]; // Thêm mảng variants
   selectedColor: string | null;
   selectedStorage: string | null;
   setSelectedColor: (id: string) => void;
   setSelectedStorage: (id: string) => void;
-  variantId: string | null;
-  setVariantId: (id: string) => void;
+  variantId: string;
 }
 
 const ProductInfor = ({
   product,
   colors,
   storages,
-  variants,
   selectedColor,
   selectedStorage,
   setSelectedColor,
   setSelectedStorage,
   variantId,
-  setVariantId,
 }: ProductInforProps) => {
   const {
     product_name,
@@ -72,22 +60,6 @@ const ProductInfor = ({
 
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-  const location = useLocation();
-
-  // Lấy variantId từ URL nếu có
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const urlVariantId = params.get("variantId");
-    if (urlVariantId && variants && variants.length > 0) {
-      const variant = variants.find(v => v._id === urlVariantId);
-      if (variant) {
-        setSelectedColor(variant.color_id);
-        setSelectedStorage(variant.storage_id);
-        setVariantId(variant._id);
-      }
-    }
-    // eslint-disable-next-line
-  }, [location.search, variants]);
 
   const increaseQuantity = () => {
     if (quantity < stock_quantity) {
@@ -109,10 +81,6 @@ const ProductInfor = ({
       toast.error("Bạn cần đăng nhập để mua hàng!");
       return;
     }
-    if (!variantId) {
-      toast.error("Vui lòng chọn màu sắc và dung lượng!");
-      return;
-    }
     if (quantity > stock_quantity) {
       toast.error(`Số lượng tồn kho không đủ. Chỉ còn ${stock_quantity} sản phẩm.`);
       return;
@@ -131,10 +99,6 @@ const ProductInfor = ({
     const token = localStorage.getItem("accessToken");
     if (!token) {
       toast.error("Bạn cần đăng nhập để thêm vào giỏ hàng!");
-      return;
-    }
-    if (!variantId) {
-      toast.error("Vui lòng chọn màu sắc và dung lượng!");
       return;
     }
     if (quantity > stock_quantity) {
@@ -172,6 +136,8 @@ const ProductInfor = ({
 
       <div>
         <h3 className="text-lg font-bold mb-2">{product_name}</h3>
+
+        {/* --- UPDATED PRICE DISPLAY --- */}
         <div className="flex items-baseline gap-3 mb-4">
           <p className="text-2xl font-semibold text-red-600">
             {price.toLocaleString()}₫
@@ -182,6 +148,8 @@ const ProductInfor = ({
             </p>
           )}
         </div>
+        
+        {/* --- DISPLAY DISCOUNT BADGE AND DESCRIPTION --- */}
         {discount_info && (
           <div className="mb-4">
             <span className="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-1 rounded-full">
@@ -189,7 +157,10 @@ const ProductInfor = ({
             </span>
           </div>
         )}
+
         <p className="text-sm text-gray-600 mb-4">{description}</p>
+
+        {/* COLOR SELECTION */}
         <div className="mb-4">
           <p className="font-bold mb-2">Chọn màu sắc:</p>
           <div className="flex gap-2 flex-wrap">
@@ -208,6 +179,8 @@ const ProductInfor = ({
             ))}
           </div>
         </div>
+
+        {/* STORAGE SELECTION */}
         <div className="mb-6">
           <p className="font-bold mb-2">Chọn dung lượng:</p>
           <div className="flex gap-2 flex-wrap">
@@ -226,6 +199,8 @@ const ProductInfor = ({
             ))}
           </div>
         </div>
+
+        {/* LABELS */}
         <div className="flex flex-wrap gap-2 py-5 border-b border-gray-300">
           <span className="text-green-600 text-xs font-medium border border-green-500 rounded px-2 py-0.5">
             FREE SHIPPING
@@ -234,6 +209,8 @@ const ProductInfor = ({
             FREE GIFT
           </span>
         </div>
+
+        {/* QUANTITY + ACTION */}
         <div className="my-6 flex flex-wrap items-center gap-3">
           <div className="flex items-center border rounded overflow-hidden">
             <button
@@ -250,12 +227,14 @@ const ProductInfor = ({
               +
             </button>
           </div>
+
           <button
             onClick={handleBuyNow}
             className="text-[#1ABA1A] border border-[#1ABA1A] px-4 py-2 rounded text-sm font-semibold hover:bg-[#1ABA1A] hover:text-white transition-colors"
           >
             <i className="fa-solid fa-credit-card mr-1" /> Mua ngay
           </button>
+          
           <button
             onClick={handleAddToCart}
             className="text-white bg-[#1ABA1A] border border-[#1ABA1A] px-4 py-2 rounded text-sm font-semibold hover:opacity-90 transition-opacity"
@@ -263,6 +242,8 @@ const ProductInfor = ({
             <i className="fa-solid fa-cart-plus mr-1" /> Thêm vào giỏ
           </button>
         </div>
+
+        {/* INFO */}
         <div className="my-5 text-sm text-gray-700">
           <p>
             <span className="font-bold">Danh mục:</span>{" "}

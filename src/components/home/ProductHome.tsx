@@ -11,7 +11,7 @@ interface Discount {
 interface Product {
   _id: string;
   price: number;
-  image_url?: string;
+  image_url: string;
   product: {
     product_name: string;
     slug: string; 
@@ -40,6 +40,13 @@ const ProductHome = () => {
 
     fetchProducts();
   }, []);
+
+  const getImageUrl = (image_url?: string) => {
+    if (!image_url) return '/assets/images/default.png';
+    if (image_url.startsWith('http')) return image_url;
+    if (image_url.startsWith('/uploads/products/')) return `http://localhost:8888${image_url}`;
+    return `http://localhost:8888/uploads/products/${image_url}`;
+  };
 
   return (
     <div className="best-seller-grid">
@@ -74,9 +81,8 @@ const ProductHome = () => {
             {/* Truyền variantId lên URL */}
             <Link to={`/products/${product.product.slug}?variantId=${product._id}`}>
               <img
-                src={product.image_url || 'assets/images/default.png'}
-                alt={`${product.product.product_name} ${product.color.color_name} ${product.storage.storage_name}`}
-                className="best-seller-image"
+                src={getImageUrl(product.image_url)}
+                alt={product.product.product_name}
               />
             </Link>
             <p className="best-seller-name">

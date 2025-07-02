@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import ProductInfor from '../../components/productdetail/ProductInfor';
 import axios from 'axios';
 import Tab from '../../components/productdetail/Tab';
 
-// --- Type definitions ---
+// --- Type definitions for better readability ---
 interface Discount {
   discount_type: 'percentage' | 'fixed';
   discount_value: number;
@@ -25,7 +25,7 @@ interface Variant {
 interface ProductData {
   product_name: string;
   description: string;
-  category_id: any;
+  category_id: any; // You can define a Category interface if needed
   variants: Variant[];
   options: {
     colors: any[];
@@ -36,10 +36,6 @@ interface ProductData {
 const ProductDetail = () => {
   const { slug } = useParams<{ slug: string }>();
   const location = useLocation();
-  const navigate = useNavigate();
-  const params = new URLSearchParams(location.search);
-  const urlVariantId = params.get("variantId");
-
   const [product, setProduct] = useState<ProductData | null>(null);
   const [variants, setVariants] = useState<Variant[]>([]);
   const [colors, setColors] = useState<any[]>([]);
@@ -49,11 +45,15 @@ const ProductDetail = () => {
   const [selectedStorage, setSelectedStorage] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
-  // Fetch product data
+  // Lấy variantId từ query string
+  const searchParams = new URLSearchParams(location.search);
+  const variantIdFromUrl = searchParams.get('variantId');
+
+  // --- Fetch product data from API ---
   useEffect(() => {
-    if (!slug) return;
-    setLoading(true);
     const fetchProduct = async () => {
+      if (!slug) return;
+      setLoading(true);
       try {
         const res = await axios.get(`http://localhost:8888/api/products/group/${slug}`);
         const data = res.data.data;
@@ -62,11 +62,13 @@ const ProductDetail = () => {
         setColors(data.options?.colors || []);
         setStorages(data.options?.storages || []);
 
+        let defaultVariant = null;
         if (data.variants && data.variants.length > 0) {
-          let defaultVariant = data.variants[0];
-          if (urlVariantId) {
-            const found = data.variants.find(v => v._id === urlVariantId);
-            if (found) defaultVariant = found;
+          if (variantIdFromUrl) {
+            defaultVariant = data.variants.find(v => v._id === variantIdFromUrl);
+          }
+          if (!defaultVariant) {
+            defaultVariant = data.variants[0];
           }
           setSelectedVariant(defaultVariant);
           setSelectedColor(defaultVariant.color._id);
@@ -79,32 +81,21 @@ const ProductDetail = () => {
       }
     };
     fetchProduct();
-    // eslint-disable-next-line
-  }, [slug, urlVariantId]);
+  }, [slug, variantIdFromUrl]);
 
-  // Update variant when color or storage changes
+  // --- Update variant when color or storage changes ---
   useEffect(() => {
     if (!selectedColor || !selectedStorage || !variants.length) return;
     const matched = variants.find(
       (v) => v.color._id === selectedColor && v.storage._id === selectedStorage
     );
     if (matched) {
-      setSelectedVariant(matched);
+        setSelectedVariant(matched);
     } else {
-      setSelectedVariant(null);
+        // Optional: handle cases where the combination doesn't exist
+        setSelectedVariant(null);
     }
   }, [selectedColor, selectedStorage, variants]);
-
-  // Cập nhật URL khi chọn biến thể khác
-  useEffect(() => {
-    if (selectedVariant) {
-      navigate(
-        `/products/${slug}?variantId=${selectedVariant._id}`,
-        { replace: true }
-      );
-    }
-    // eslint-disable-next-line
-  }, [selectedVariant]);
 
   if (loading) {
     return <div className="p-10 text-center">Loading...</div>;
@@ -114,7 +105,7 @@ const ProductDetail = () => {
     return <div className="p-10 text-center text-red-500">Product not found or variant unavailable.</div>;
   }
 
-  // Discount Calculation
+  // --- Discount Calculation Logic ---
   const originalPrice = selectedVariant.price;
   let finalPrice = originalPrice;
   let discountInfo: { badge: string; description: string | undefined; } | undefined = undefined;

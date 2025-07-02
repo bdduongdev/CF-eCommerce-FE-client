@@ -17,6 +17,7 @@ import ChangePassword from '../components/profile/ChangePassword';
 import VerifyEmail from '../pages/register/VerifyEmail';
 import ForgotPassword from '../components/profile/ForgotPassword';
 import Success from '../pages/checkout/Success';
+import MyOrders from '../pages/profile/MyOrders';
 
 export const mainRoutes: RouteObject[] = [
   {
@@ -31,8 +32,10 @@ export const mainRoutes: RouteObject[] = [
         element: <Profile />,
         children: [
           { index: true, element: <FormInfor /> },
+          { path: 'order', element: <MyOrders /> },
           { path: 'address', element: <Address /> },
           { path: 'change-password', element: <ChangePassword /> },
+          { path: 'forgot-password', element: <ForgotPassword /> },
         ],
       },
       { path: '/contact', element: <Contact /> },
@@ -45,7 +48,6 @@ export const mainRoutes: RouteObject[] = [
       { path: 'register', element: <Register /> },
       { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'login', element: <Login /> },
-      { path: 'forgot-password', element: <ForgotPassword /> },
     ],
   },
 ];

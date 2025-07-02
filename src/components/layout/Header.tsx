@@ -8,10 +8,17 @@ type UserType = {
   email: string
 }
 
+type CategoryType = {
+  _id: string
+  category_name: string
+  slug?: string
+}
+
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [user, setUser] = useState<UserType | null>(null)
-  const [cartInfo, setCartInfo] = useState({ totalQuantity: 0, totalPrice:   0 })
+  const [cartInfo, setCartInfo] = useState({ totalQuantity: 0, totalPrice: 0 })
+  const [categories, setCategories] = useState<CategoryType[]>([])
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,9 +55,22 @@ export default function Header() {
       setCartInfo({ totalQuantity, totalPrice })
     }
     updateCartInfo()
-    // Lắng nghe sự kiện custom để cập nhật realtime nếu muốn
     window.addEventListener("cartUpdated", updateCartInfo)
     return () => window.removeEventListener("cartUpdated", updateCartInfo)
+  }, [])
+
+  // Lấy danh sách category
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("http://localhost:8888/api/categories")
+        const data = await res.json()
+        setCategories(data.data.categories)
+      } catch (err) {
+        setCategories([])
+      }
+    }
+    fetchCategories()
   }, [])
 
   const handleLogout = () => {
@@ -59,7 +79,7 @@ export default function Header() {
     localStorage.removeItem("token") ;
     localStorage.removeItem("role") ;  
     setUser(null)
-    navigate("/") // hoặc navigate("/login")
+    navigate("/")
   }
 
   return (
@@ -101,10 +121,20 @@ export default function Header() {
               <Link to="/products" className="flex items-center">
                 Products <ChevronDown className="ml-1 h-4 w-4" />
               </Link>
-              <ul className="absolute top-full left-0 hidden group-hover:flex flex-col bg-[#EEEEEE] w-[200px] shadow-lg rounded-md z-20">
-                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Name Category</Link></li>
-                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Name Category</Link></li>
-                <li><Link to="#" className="block px-4 py-2 hover:bg-gray-300">Name Category</Link></li>
+              <ul className="absolute top-full left-0 hidden group-hover:flex flex-col bg-[#EEEEEE] w-[250px] shadow-lg rounded-md z-20 max-h-[400px] overflow-y-auto">
+                {categories.length === 0 && (
+                  <li className="px-4 py-2 text-gray-500">No categories</li>
+                )}
+                {categories.map(category => (
+                  <li key={category._id}>
+                    <Link
+                      to={`/products/category/${category.slug || category._id}`}
+                      className="block px-4 py-2 hover:bg-gray-300"
+                    >
+                      {category.category_name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </li>
             <li><Link to="/blog">Blog</Link></li>
@@ -203,10 +233,21 @@ export default function Header() {
                 <span>Products</span>
                 <ChevronDown className="h-4 w-4 ml-1" />
               </summary>
-              <ul className="ml-4 mt-2 space-y-2">
-                <li><Link to="/products" onClick={() => setMobileMenuOpen(false)}>Product A</Link></li>
-                <li><Link to="#" onClick={() => setMobileMenuOpen(false)}>Product B</Link></li>
-                <li><Link to="#" onClick={() => setMobileMenuOpen(false)}>Product C</Link></li>
+              <ul className="ml-4 mt-2 space-y-2 max-h-[300px] overflow-y-auto">
+                {categories.length === 0 && (
+                  <li className="px-4 py-2 text-gray-500">No categories</li>
+                )}
+                {categories.map(category => (
+                  <li key={category._id}>
+                    <Link
+                      to={`/products/category/${category.slug || category._id}`}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block px-4 py-2 hover:bg-gray-300"
+                    >
+                      {category.category_name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </details>
           </li>
@@ -223,4 +264,4 @@ export default function Header() {
       )}
     </header>
   )
-} 
+}

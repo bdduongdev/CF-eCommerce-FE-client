@@ -20,21 +20,6 @@ const Product = () => {
                 <section className="bg-white rounded-lg shadow py-[30px]">
                     <div className="px-[30px] rounded-md">
                         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
-                            {/* Sidebar categories */}
-                            <SidebarCate />
-                            {/* Right content title + product grid */}
-                            <div className="flex flex-col lg:col-span-9">
-                                {/* Title */}
-                                <div className="flex items-center justify-between mb-4">
-                                    <h2 className="text-lg font-semibold">
-                                        BEST SELLER IN THIS CATEGORY
-                                    </h2>
-                                </div>
-                                {/* Best Seller Product Grid */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-                                    <ProductGrid />
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <hr className="my-2 px-[30px]" />
@@ -64,14 +49,9 @@ const Product = () => {
                                     </div>
                                 </div>
                                 {/* Product Grid */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                                    <ProductGrid />
-                                    <ProductGrid />
-                                    <ProductGrid />
+                                <div>
                                     <ProductGrid />
                                 </div>
-                                {/* Pagination */}
-                                <Pagination />
                             </div>
                         </div>
                     </div>
