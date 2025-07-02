@@ -35,7 +35,6 @@ export const mainRoutes: RouteObject[] = [
           { path: 'order', element: <MyOrders /> },
           { path: 'address', element: <Address /> },
           { path: 'change-password', element: <ChangePassword /> },
-          { path: 'forgot-password', element: <ForgotPassword /> },
         ],
       },
       { path: '/contact', element: <Contact /> },
@@ -48,6 +47,7 @@ export const mainRoutes: RouteObject[] = [
       { path: 'register', element: <Register /> },
       { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'login', element: <Login /> },
+      { path: 'forgot-password', element: <ForgotPassword /> },
     ],
   },
 ];
