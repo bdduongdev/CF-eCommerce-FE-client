@@ -1,7 +1,6 @@
-// main.route.tsx
+import { type RouteObject } from 'react-router-dom';
 import ClientLayout from '../layouts/client';
 import HomePage from '../pages/home/HomePage';
-import { type RouteObject } from 'react-router-dom';
 import Register from '../pages/register/Register';
 import Login from '../pages/login/Login';
 import ProductDetail from '../pages/productdetail/ProductDetail';
@@ -25,10 +24,12 @@ export const mainRoutes: RouteObject[] = [
     element: <ClientLayout />,
     children: [
       { index: true, element: <HomePage /> },
-      { path: '/products', element: <Product /> },
-      { path: '/products/:slug', element: <ProductDetail /> }, // ✅ updated to use slug
+      { path: 'products', element: <Product /> },
+      { path: 'products/category/:slug', element: <Product /> }, //  Danh sách sản phẩm theo danh mục
+      { path: 'products/:slug', element: <ProductDetail /> },    //  Chi tiết sản phẩm
+
       {
-        path: '/profile',
+        path: 'profile',  
         element: <Profile />,
         children: [
           { index: true, element: <FormInfor /> },
@@ -37,13 +38,14 @@ export const mainRoutes: RouteObject[] = [
           { path: 'change-password', element: <ChangePassword /> },
         ],
       },
-      { path: '/contact', element: <Contact /> },
-      { path: '/wishlist', element: <Wishlist /> },
-      { path: '/cart', element: <Cart /> },
-      { path: '/checkout', element: <Checkout /> },
-      { path: '/checkout/success', element: <Success /> },
 
-      // auth
+      { path: 'contact', element: <Contact /> },
+      { path: 'wishlist', element: <Wishlist /> },
+      { path: 'cart', element: <Cart /> },
+      { path: 'checkout', element: <Checkout /> },
+      { path: 'checkout/success', element: <Success /> },
+
+      // Auth
       { path: 'register', element: <Register /> },
       { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'login', element: <Login /> },

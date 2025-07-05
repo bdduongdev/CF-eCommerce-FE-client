@@ -1,110 +1,52 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link, useLocation } from 'react-router-dom';
+
+type Category = {
+  _id: string;
+  category_name: string;
+  slug?: string;
+};
 
 const PopularCate = () => {
-    return (
-        <>
-            <section className="bg-white rounded-lg shadow mb-4 py-[30px]">
-                {/* Tiêu đề */}
-                <div className="flex justify-between items-center mb-[30px] px-[30px] flex-wrap gap-2">
-                    <h2 className="text-[18px] font-bold">POPULAR CATEGORIES</h2>
-                    <a className="text-[13px] text-[#666666]" href="#">View All</a>
-                </div>
+  const [categories, setCategories] = useState<Category[]>([]);
+  const location = useLocation();
 
-                {/* Grid Items */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-[30px]">
-                    {/* Item 1 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">iPhone (iOS)</p>
-                            <p className="text-xs text-gray-500">18 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="iPhone Series" className="h-16 w-16 object-contain" />
-                    </div>
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await axios.get("http://localhost:8888/api/categories");
+        setCategories(res.data?.data?.categories || []);
+      } catch (error) {
+        console.error("Lỗi khi lấy danh mục:", error);
+      }
+    };
 
-                    {/* Item 2 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Samsung</p>
-                            <p className="text-xs text-gray-500">24 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Samsung" className="h-16 w-16 object-contain" />
-                    </div>
+    fetchCategories();
+  }, []);
 
-                    {/* Item 3 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Xiaomi</p>
-                            <p className="text-xs text-gray-500">12 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Xiaomi" className="h-16 w-16 object-contain" />
-                    </div>
+  return (
+    <section className="bg-white rounded-lg shadow mb-4 py-6">
+      <div className="flex justify-between items-center px-6 mb-4 flex-wrap gap-2">
+        <h2 className="text-lg font-bold">POPULAR CATEGORIES</h2>
+        <Link to="/products" className="text-sm text-gray-600 hover:underline">View All</Link>
+      </div>
 
-                    {/* Item 4 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Tablet</p>
-                            <p className="text-xs text-gray-500">9 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Tablet" className="h-16 w-16 object-contain" />
-                    </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 px-6">
+        {categories
+          .filter(cat => !location.pathname.includes(`/products/category/${cat.slug || cat._id}`))
+          .map(cat => (
+            <Link
+              to={`/products/category/${cat.slug || cat._id}`}
+              key={cat._id}
+              className="border rounded-lg px-4 py-3 bg-gray-50 hover:bg-green-100 transition-colors shadow-sm flex items-center justify-center text-sm font-medium text-gray-800 text-center h-[80px]"
+            >
+              {cat.category_name}
+            </Link>
+          ))}
+      </div>
+    </section>
+  );
+};
 
-                    {/* Item 5 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Accessories</p>
-                            <p className="text-xs text-gray-500">30 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Accessories" className="h-16 w-16 object-contain" />
-                    </div>
-
-                    {/* Item 6 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">OPPO</p>
-                            <p className="text-xs text-gray-500">14 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="OPPO" className="h-16 w-16 object-contain" />
-                    </div>
-
-                    {/* Item 7 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Realme</p>
-                            <p className="text-xs text-gray-500">11 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Realme" className="h-16 w-16 object-contain" />
-                    </div>
-
-                    {/* Item 8 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Vivo</p>
-                            <p className="text-xs text-gray-500">16 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Vivo" className="h-16 w-16 object-contain" />
-                    </div>
-
-                    {/* Item 9 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Huawei</p>
-                            <p className="text-xs text-gray-500">7 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Huawei" className="h-16 w-16 object-contain" />
-                    </div>
-
-                    {/* Item 10 */}
-                    <div className="flex justify-between items-center bg-gray-50 rounded-lg p-3">
-                        <div className="text-left flex-1">
-                            <p className="text-sm font-semibold">Nokia</p>
-                            <p className="text-xs text-gray-500">5 items</p>
-                        </div>
-                        <img src="assets/images/topcellphone1.png" alt="Nokia" className="h-16 w-16 object-contain" />
-                    </div>
-                </div>
-            </section>
-        </>
-    )
-}
-
-export default PopularCate
+export default PopularCate;

@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useParams } from 'react-router-dom'; // 👈 Thêm useParams
 import axios from 'axios';
-
 import SidebarFilter from '../../components/productpage/SidebarFilter';
 import ProductBanner from '../../components/productpage/ProductBanner';
 import PopularCate from '../../components/productpage/PopularCate';
 import Pagination from '../../components/productpage/Pagination';
-import ProductItem from './ProductItem ';
+import ProductItem from './ProductItem';
 
 const Product = () => {
+    const { slug } = useParams(); // 👈 Lấy slug từ route /products/category/:slug
     const [searchParams] = useSearchParams();
-    const categoryId = searchParams.get('category');
+    const categoryQuery = searchParams.get('category'); // từ query ?category=...
+
+    const categoryId = slug || categoryQuery; // 👈 Ưu tiên slug, fallback query
 
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
@@ -34,10 +36,10 @@ const Product = () => {
                 setLoading(true);
                 const res = await axios.get('http://localhost:8888/api/variant', {
                     params: {
-                        category: categoryId,
+                        category: categoryId, // ✅ đúng categoryId theo slug hoặc query
                         page: currentPage,
                         limit: pageSize,
-                        ...filters, 
+                        ...filters,
                     },
                 });
 
@@ -60,7 +62,7 @@ const Product = () => {
 
     return (
         <main className="bg-[#e2e4eb] py-4">
-            <ProductBanner />
+            {/* <ProductBanner /> */}
             <PopularCate />
 
             <section className="bg-white rounded-lg shadow py-[30px]">
